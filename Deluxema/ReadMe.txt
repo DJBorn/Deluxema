@@ -1,21 +1,34 @@
 ========================================================================
-    Dark GDK - 2D Game : Deluxema Project Overview
+    Deluxema Project Overview
 ========================================================================
 
 Dark GDK - 2D Game has created this Deluxema project for you as a starting point.
 
-This file contains a summary of what you will find in each of the files that make up your project.
 
-Dark GDK - 2D Game.vcproj
-    This is the main project file for projects generated using an Application Wizard. 
-    It contains information about the version of the product that generated the file, and 
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-Dark GDK - The Game Creators - www.thegamecreators.com
+=====================================
+Deluxema.cpp
+=====================================
+The main file where all the events live
 
 
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
 
-/////////////////////////////////////////////////////////////////////////////
+=====================================
+HitBox.cpp
+=====================================
+The file where the hitBox struct is found (heavily used)
+
+
+
+=====================================
+idAssigner.cpp
+=====================================
+This is where the idAssigner lives, gives an unused id to any files used (music, sprites)
+This is also where the ids must be deleted when the files are deleted.
+
+
+
+=====================================
+Map.cpp
+=====================================
+This is where the Map class lives. Background sprites, walls and floors.
+

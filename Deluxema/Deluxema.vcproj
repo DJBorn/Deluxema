@@ -147,6 +147,18 @@
 			Filter="txt;cpp;h&quot;n"
 			>
 			<File
+				RelativePath=".\Ace.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Animation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Character.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Deluxema.cpp"
 				>
 			</File>
@@ -156,6 +168,10 @@
 			</File>
 			<File
 				RelativePath=".\idAssigner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Input.cpp"
 				>
 			</File>
 			<File
@@ -171,11 +187,27 @@
 			Name="Header Files"
 			>
 			<File
+				RelativePath=".\Ace.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Animation.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Character.h"
+				>
+			</File>
+			<File
 				RelativePath=".\HitBox.h"
 				>
 			</File>
 			<File
 				RelativePath=".\idAssigner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Input.h"
 				>
 			</File>
 			<File

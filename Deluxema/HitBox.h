@@ -9,4 +9,6 @@ struct hitBox
 	int height;
 };
 
+bool checkCollision(hitBox target, hitBox object);
+
 #endif // _HITBOX_H_

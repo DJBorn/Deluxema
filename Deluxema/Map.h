@@ -14,11 +14,20 @@ class Map {
 	Map ();
 	~Map ();
 	
+	// global hit box (any character can collide with it)
+	void addGlobalHitBox(int x, int y, int width, int height);
 
+	// Ace hit box (only Ace can collide with it; special player boundaries)
+	void addAceHitBox(int x, int y, int width, int height);
+
+	bool checkGlobalHitBox(hitBox object);
+	
     private:
 		int idMap;
-		vector<hitBox> GlobalhitBox;
-		vector<hitBox> AcehitBox;
+		int xMap;
+		int yMap;
+		vector<hitBox> globalHitBox;
+		vector<hitBox> aceHitBox;
 };
 
 #endif /* __MAP_H__ */
