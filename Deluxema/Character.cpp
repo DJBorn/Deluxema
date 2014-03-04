@@ -8,3 +8,7 @@ using namespace std;
 // Destructor
 Character::~Character(){}
 
+hitBox Character::getBody()
+{
+	return body;
+}

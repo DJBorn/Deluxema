@@ -9,19 +9,23 @@
 class Character
 {
 protected:
-	int x;
-	int y;
+	int spriteX;
+	int spriteY;
+
 	hitBox body;
 	hitBox weapon;
 	vector<Animation*> animations;
+	virtual void moveCharacter(int xShift, int yShift) = 0;
 
-	void moveCharacter(int xShift, int yShift);
+
 public:
 	// Destructor
 	virtual ~Character();
 	
 	// Virtual functions
 	virtual void playAnimation() = 0;
+
+	hitBox getBody();
 
 	
 };

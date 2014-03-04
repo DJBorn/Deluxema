@@ -48,8 +48,6 @@ void Animation::playAnimation(int x, int y)
 		// set the frame
 		dbSetSpriteFrame(id, curFrame);
 
-		// refresh the sprite
-		dbSprite(id, x, y, id);
 
 		// set the next frame
 		curFrame++;
@@ -58,6 +56,8 @@ void Animation::playAnimation(int x, int y)
 		if(curFrame > maxFrame)
 			curFrame = startFrame;
 	}
+	// refresh the sprite
+	dbSprite(id, x, y, id);
 }
 
 void Animation::stopAnimation()

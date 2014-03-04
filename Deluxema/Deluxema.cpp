@@ -72,13 +72,14 @@ void setup()
 // Map setup creates all the hit boxes where the player and robots shouldn't go
 void mapSetup(Map *map)
 {
-	map->addGlobalHitBox(0, 250, 1000, 50);
+	map->addGlobalHitBox(0, 386, 1000, 50);
 	map->addAceHitBox(-12, 0, 20, 500);
 	map->addAceHitBox(992, 0, 20, 500);
+	map->addGlobalHitBox(400, 100, 20, 20);
 	eGameMode = eFiller;
 }
 
-void Deluxema(Map *map, Character *ace)
+void Deluxema(Map *map, Ace *ace)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -90,6 +91,31 @@ void Deluxema(Map *map, Character *ace)
 		}
 	case eFiller:
 		{	
+			if(checkUp())
+			{
+				ace->temp(0, -3);
+				while(map->checkGlobalHitBox(ace->getBody()))
+					ace->temp(0, 1);
+			}	
+			else if(checkDown())
+			{
+				ace->temp(0, 3);
+				while(map->checkGlobalHitBox(ace->getBody()))
+					ace->temp(0, -1);
+			}	
+			else if(checkRight())
+			{
+				ace->temp(3, 0);
+				while(map->checkGlobalHitBox(ace->getBody()))
+					ace->temp(-1, 0);
+			}	
+			else if(checkLeft())
+			{
+				ace->temp(-3, 0);
+				while(map->checkGlobalHitBox(ace->getBody()))
+					ace->temp(1, 0);
+			}
+			ace->setAnimation(Ace::eAnimation::eJumpSlice);
 			ace->playAnimation();
 			break;
 		}
@@ -105,8 +131,9 @@ void DarkGDK ( void )
 
 	// Create objects
 	Map *map = new Map();
-	Character *ace;
-	ace = new Ace(50, 50);
+	Ace *ace = new Ace(50, 50);
+	dbCreateAnimatedSprite(50, "includes//Sprites//box.bmp", 1, 1, 50);
+	dbSprite(50, 400, 100, 50);
 	
 
 	// Main Dark GDK loop

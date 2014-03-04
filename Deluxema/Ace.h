@@ -16,9 +16,15 @@ public:
 	~Ace();
 
 	// enum for which animation he is in
-	enum eAnimation {eStand};
+	enum eAnimation {eStand, eRun, eSlice, eJumpSlice};
 	// play an animation
 	void playAnimation();
+	void setAnimation(eAnimation animation);
+	void moveCharacter(int xShift, int yShift);
+
+	void temp(int x, int y);
+private:
+	eAnimation eStance;
 };
 
 #endif // _ACE_H_
