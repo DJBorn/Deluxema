@@ -6,6 +6,7 @@
 #include "RectangleObject.h"
 #include "Animation.h"
 #include "Character.h"
+#include "Map.h"
 
 // Class for a generic character on the screen
 class Ace : public Character
@@ -16,7 +17,7 @@ public:
 	~Ace();
 
 	// enum for which animation he is in
-	enum eAnimation {eStand, eRun, eSlice, eJumpSlice};
+	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump};
 
 	// play an animation
 	void playAnimation();
@@ -25,21 +26,26 @@ public:
 	void setAnimation(eAnimation animation);
 
 	// set which way he is facing (True -> Right, False -> Left)
-	void setDirection(bool right);
+	void changeDirection();
+
+	// check if he is facing right
+	bool getFacingRight();
 
 	void setFall(double fall);
 	double getFall();
 	int getSpeed();
-
+	bool getFlying();
 	// Let gravity affect Ace's fall
 	void aceGravity(double gravity);
 
-	void move(int x, int y);
+	void move(int x, int y, Map *map);
 private:
+	int leftConstant;
 	eAnimation eStance;
 	bool facingRight;
 	int aceSpeed;
 	double aceFall;
+	bool flying;
 };
 
 #endif // _ACE_H_

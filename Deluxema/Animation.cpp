@@ -5,9 +5,12 @@
 using namespace std;
 
 // Create a new animation
-Animation::Animation(char* path, int width, int height, int startFrame,
+Animation::Animation(char* path, int x, int y, int flip, int width, int height, int startFrame,
 					 int curFrame, int maxFrame, int maxDelay, int priority, int scale)
 {
+	Animation::x = x;
+	Animation::y = y;
+	Animation::flip = flip;
 	Animation::path = path;
 	Animation::startFrame = startFrame;
 	Animation::curFrame = curFrame;
@@ -15,6 +18,7 @@ Animation::Animation(char* path, int width, int height, int startFrame,
 	Animation::delay = 0;
 	Animation::maxDelay = maxDelay;
 	Animation::id = generateid();
+	flipped = false;
 
 	// load the sprite
 	dbCreateAnimatedSprite(id, path, width, height, id);
@@ -35,8 +39,6 @@ Animation::~Animation()
 
 void Animation::playAnimation(int x, int y)
 {
-	// show the sprite
-	dbShowSprite(id);
 	// increase the delay counter
 	delay++;
 
@@ -48,7 +50,6 @@ void Animation::playAnimation(int x, int y)
 		// set the frame
 		dbSetSpriteFrame(id, curFrame);
 
-
 		// set the next frame
 		curFrame++;
 
@@ -57,10 +58,19 @@ void Animation::playAnimation(int x, int y)
 			curFrame = startFrame;
 	}
 	// refresh the sprite
-	dbSprite(id, x, y, id);
+	int addFlip = 0;
+	if(flipped)
+		addFlip = flip;
+
+	// position the sprite and display it
+	dbSprite(id, x + Animation::x + addFlip, y + Animation::y, id);
+	dbShowSprite(id);
 }
 
-void Animation::stopAnimation()
-{
-	dbHideSprite(id);
+void Animation::stopAnimation(){ dbHideSprite(id);}
+
+void Animation::flipAnimation() 
+{ 
+	dbMirrorSprite(id);
+	flipped = !flipped;
 }

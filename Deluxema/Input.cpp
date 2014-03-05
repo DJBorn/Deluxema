@@ -35,7 +35,7 @@ bool checkUp ( void )
 }
 
 // check if the player presses Z (Jump)
-bool checkJump ( void )
+bool checkZ ( void )
 {
 	if(dbKeyState ( 44 ))
 		return true;
@@ -43,7 +43,7 @@ bool checkJump ( void )
 }
 
 // check if the player presses X (Slice)
-bool checkSlice ( void )
+bool checkX ( void )
 {
 	if(dbKeyState ( 45 ))
 		return true;

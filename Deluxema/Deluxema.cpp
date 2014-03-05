@@ -13,7 +13,7 @@ using namespace std;
 enum  eMode { eMapSetup, eGame, eFiller };
 eMode eGameMode = eMapSetup;
 
-double gravity = .5;
+double gravity = 1;
 
 // Variables
 
@@ -78,7 +78,6 @@ void mapSetup(Map *map)
 	map->addGlobalHitBox(0, 386, 1000, 50);
 	map->addAceHitBox(-12, 0, 20, 500);
 	map->addAceHitBox(992, 0, 20, 500);
-	map->addGlobalHitBox(400, 100, 20, 20);
 	eGameMode = eGame;
 }
 
@@ -86,7 +85,46 @@ void applyGravity(Ace *ace)
 {
 	ace->aceGravity(gravity);
 }
+void controlAce(Ace *ace, Map *map)
+{
+	int aceHorizonalMove = 0;
+	ace->setAnimation(ace->eStand);
 
+	if(checkZ() && !ace->getFlying())
+	{
+		ace->setFall(-18);
+	}
+	
+	if(checkX() && !ace->getFlying())
+	{
+		ace->setAnimation(ace->eSlice);
+	}
+
+	if(checkRight())
+	{
+		if(!ace->getFacingRight())
+			ace->changeDirection();
+
+		ace->setAnimation(ace->eRun);
+
+		aceHorizonalMove = ace->getSpeed();
+	}	
+	else if(checkLeft())
+	{
+		if(ace->getFacingRight())
+			ace->changeDirection();
+		aceHorizonalMove = ace->getSpeed() * -1;
+		ace->setAnimation(ace->eRun);
+
+	}
+
+	if(ace->getFlying())
+		ace->setAnimation(ace->eJump);
+	ace->playAnimation();
+	
+	ace->move(aceHorizonalMove, ace->getFall(), map);
+
+}
 void Deluxema(Map *map, Ace *ace)
 {
 	// switch for game mode
@@ -100,40 +138,7 @@ void Deluxema(Map *map, Ace *ace)
 	case eGame:
 		{	
 			applyGravity(ace);
-			if(checkUp())
-			{
-				ace->setFall(-10);
-				while(map->checkGlobalHitBox((RectangleObject)*ace))
-					ace->move(0, 1);
-			}	
-			else if(checkDown())
-			{
-				ace->move(0, 3);
-				while(map->checkGlobalHitBox((RectangleObject)*ace))
-					ace->move(0, -1);
-			}	
-			else if(checkRight())
-			{
-				ace->move(3, 0);
-				while(map->checkGlobalHitBox((RectangleObject)*ace))
-					ace->move(-1, 0);
-			}	
-			else if(checkLeft())
-			{
-				ace->move(-3, 0);
-				while(map->checkGlobalHitBox((RectangleObject)*ace))
-					ace->move(1, 0);
-			}
-
-			ace->move(0, ace->getFall());
-			while(map->checkGlobalHitBox((RectangleObject)*ace))
-			{
-				ace->setFall(0);
-				ace->move(0, -1);
-			}
-
-			ace->setAnimation(ace->eJumpSlice);
-			ace->playAnimation();
+			controlAce(ace, map);
 			break;
 		}
 	}
@@ -149,14 +154,18 @@ void DarkGDK ( void )
 	// Create objects
 	Map *map = new Map();
 	Ace *ace = new Ace(50, 50);
-	dbCreateAnimatedSprite(50, "includes//Sprites//box.bmp", 1, 1, 50);
-	dbSprite(50, 400, 100, 50);
 	
 
+	int time = 0;
+	int timespeed = 0;
 	// Main Dark GDK loop
 	while ( LoopGDK ( ) )
 	{
-		Deluxema(map, ace);
+		time++;
+			if(time > timespeed)
+			{
+				time = 0;
+				Deluxema(map, ace);}
 
 		// exit if escape key is pressed
 		if ( dbEscapeKey ( ) )
@@ -170,3 +179,24 @@ void DarkGDK ( void )
 	delete map;
 	return;
 }
+
+
+
+/*
+	PLAY SPRITES ALL ATLEAST ONCE BEFORE USING (weird buggy glitch that occurs only on first run of animations)
+	ace->setAnimation(ace->eRun);
+	for(int i = 0; i < 24; i++)
+		ace->playAnimation();
+	ace->setAnimation(ace->eJump);
+	for(int i = 0; i < 24; i++)
+		ace->playAnimation();
+	ace->setAnimation(ace->eJumpSlice);
+	for(int i = 0; i < 24; i++)
+		ace->playAnimation();
+	ace->setAnimation(ace->eSlice);
+	for(int i = 0; i < 24; i++)
+		ace->playAnimation();
+	ace->setAnimation(ace->eStand);
+	for(int i = 0; i < 24; i++)
+		ace->playAnimation();
+*/

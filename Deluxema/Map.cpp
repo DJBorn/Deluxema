@@ -44,9 +44,20 @@ void Map::addAceHitBox(int x, int y, int width, int height)
 bool Map::checkGlobalHitBox(RectangleObject object)
 {
 		for(int i = 0; i < globalHitBox.size(); i++)
-		{
 			if(globalHitBox[i].checkCollision(object))
 				return true;
-		}
+	return false;
+}
+
+// hit detection for ace hitbox
+bool Map::checkAceHitBox(RectangleObject object)
+{
+		for(int i = 0; i < aceHitBox.size(); i++)
+			if(aceHitBox[i].checkCollision(object))
+				return true;
+
+		for(int i = 0; i < globalHitBox.size(); i++)
+			if(globalHitBox[i].checkCollision(object))
+				return true;
 	return false;
 }

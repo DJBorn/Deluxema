@@ -3,27 +3,36 @@
 // local functions
 #include "RectangleObject.h"
 #include "Animation.h"
+#include "Map.h"
 #include "Ace.h"
 
 using namespace std;
 
 Ace::Ace(int x, int y)
 {
-	aceSpeed = 3;
+	aceSpeed = 5;
 	aceFall = 0;
+
+	leftConstant = 0;
 
 	Ace::x = x;
 	Ace::y = y;
 	eStance = eStand;
 
+	facingRight = true;
+	flying = false;
+
 	width = 28;
 	height = 74;
 
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", 4, 2, 1, 1, 8, 6, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", 5, 2, 1, 1, 10, 3, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", 5, 2, 1, 1, 10, 2, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", 3, 3, 1, 1, 9, 2, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 1, 1, 1, 1, 1, 1, 200, 200)); //TEMPORARY GET RID
+	// add all of Ace's animations
+								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 1, 1, 8, 6, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", -62, -14, 50, 5, 2, 1, 1, 10, 3, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 1, 1, 10, 2, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 1, 1, 9, 2, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 1, 1, 1, 200, 200));
+	//animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 0, 0, 0, 1, 1, 1, 1, 1, 1, 200, 200)); //TEMPORARY GET RID
 }
 
 Ace::~Ace()
@@ -35,43 +44,37 @@ Ace::~Ace()
 void Ace::playAnimation()
 {
 	if(eStance == eStand)
-	{
-		spriteX = x - 20;
-		spriteY = y - 12;
-		animations[0]->playAnimation(spriteX, spriteY);
-	}
+		animations[0]->playAnimation(x, y);
 	if(eStance == eRun)
-	{
-		spriteX = x - 62;
-		spriteY = y - 14;
-		animations[1]->playAnimation(spriteX, spriteY);
-	}
+		animations[1]->playAnimation(x, y);
 	if(eStance == eSlice)
-	{
-		spriteX = x - 86;
-		spriteY = y - 30;
-		animations[2]->playAnimation(spriteX, spriteY);
-	}
+		animations[2]->playAnimation(x, y);
 	if(eStance == eJumpSlice)
-	{
-		spriteX = x - 108;
-		spriteY = y - 30;
-		animations[3]->playAnimation(spriteX, spriteY);
-	}
-	animations[4]->playAnimation(x, y);
+		animations[3]->playAnimation(x, y);
+	if(eStance == eJump)
+		animations[4]->playAnimation(x, y);
+	//animations[5]->playAnimation(x, y); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
 {
-	//for(int i = 0; i < animations.size(); i++)
-		//animations[i]->stopAnimation();
+	for(int i = 0; i < animations.size(); i++)
+	{
+		animations[i]->stopAnimation();
+	}
 
 	eStance = animation;
-
 }
 
 // set which way he is facing (True -> Right, False -> Left)
-void Ace::setDirection(bool right){facingRight = right;}
+void Ace::changeDirection()
+{
+	facingRight = !facingRight;
+	for (int i = 0; i < animations.size(); i++)
+		animations[i]->flipAnimation();
+}
+
+bool Ace::getFacingRight() { return facingRight;}
 
 // let gravity affect Ace's fall
 void Ace::aceGravity(double gravity)
@@ -79,14 +82,36 @@ void Ace::aceGravity(double gravity)
 	aceFall += gravity;
 }
 
+bool Ace::getFlying(){return flying;}
+
 void Ace::setFall(double fall){aceFall = fall;}
 double Ace::getFall(){ return aceFall;}
 int Ace::getSpeed(){ return aceSpeed;}
 
-void Ace::move(int x, int y)
+void Ace::move(int x, int y, Map *map)
 {
 	Ace::x += x;
+	while(map->checkAceHitBox((RectangleObject)*this))
+	{
+		if(x > 0)
+			Ace::x -= 1;
+		else
+			Ace::x += 1;
+	}
+
+	if(y < 0)
+		flying = true;
 	Ace::y += y;
+
+	while(map->checkAceHitBox((RectangleObject)*this))
+	{
+		if(y > 0)
+			Ace::y -= 1;
+		else
+			Ace::y += 1;
+		aceFall = 0;
+		flying = false;
+	}
 }
 /* TEMPORARY
 class Character

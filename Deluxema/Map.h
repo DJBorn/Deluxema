@@ -21,6 +21,7 @@ class Map {
 	void addAceHitBox(int x, int y, int width, int height);
 
 	bool checkGlobalHitBox(RectangleObject object);
+	bool checkAceHitBox(RectangleObject object);
 	
     private:
 		int idMap;
