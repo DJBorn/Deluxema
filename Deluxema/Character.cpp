@@ -5,10 +5,7 @@
 
 using namespace std;
 
+Character::Character(){}
+
 // Destructor
 Character::~Character(){}
-
-hitBox Character::getBody()
-{
-	return body;
-}

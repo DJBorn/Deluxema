@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "HitBox.h"
+#include "RectangleObject.h"
 #include "Animation.h"
 #include "Character.h"
 
@@ -17,37 +17,29 @@ public:
 
 	// enum for which animation he is in
 	enum eAnimation {eStand, eRun, eSlice, eJumpSlice};
+
 	// play an animation
 	void playAnimation();
-	void setAnimation(eAnimation animation);
-	void moveCharacter(int xShift, int yShift);
 
-	void temp(int x, int y);
+	// Set which animation to play
+	void setAnimation(eAnimation animation);
+
+	// set which way he is facing (True -> Right, False -> Left)
+	void setDirection(bool right);
+
+	void setFall(double fall);
+	double getFall();
+	int getSpeed();
+
+	// Let gravity affect Ace's fall
+	void aceGravity(double gravity);
+
+	void move(int x, int y);
 private:
 	eAnimation eStance;
+	bool facingRight;
+	int aceSpeed;
+	double aceFall;
 };
 
 #endif // _ACE_H_
-
-
-/* TEMPORARY
-class Character
-{
-protected:
-	int x;
-	int y;
-	hitBox body;
-	hitBox weapon;
-	vector<Animation> animations;
-
-	void moveCharacter(int xShift, int yShift);
-public:
-	// Destructor
-	virtual ~Character();
-	
-	// Virtual functions
-
-	virtual void playAnimation() = 0;
-	
-};
-*/

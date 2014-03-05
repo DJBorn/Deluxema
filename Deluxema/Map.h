@@ -4,7 +4,7 @@
 
 #include <string>
 #include <vector>
-#include "HitBox.h"
+#include "RectangleObject.h"
 
 using namespace std;
 
@@ -20,14 +20,14 @@ class Map {
 	// Ace hit box (only Ace can collide with it; special player boundaries)
 	void addAceHitBox(int x, int y, int width, int height);
 
-	bool checkGlobalHitBox(hitBox object);
+	bool checkGlobalHitBox(RectangleObject object);
 	
     private:
 		int idMap;
 		int xMap;
 		int yMap;
-		vector<hitBox> globalHitBox;
-		vector<hitBox> aceHitBox;
+		vector<RectangleObject> globalHitBox;
+		vector<RectangleObject> aceHitBox;
 };
 
 #endif /* __MAP_H__ */

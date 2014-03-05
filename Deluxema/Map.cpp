@@ -1,7 +1,7 @@
 #include "Map.h"
 #include "DarkGDK.h"
 #include "idAssigner.h"
-#include "hitBox.h"
+#include "RectangleObject.h"
 
 using namespace std;
 
@@ -29,35 +29,23 @@ Map::~Map()
 // Add a new global hit box 
 void Map::addGlobalHitBox(int x, int y, int width, int height)
 {
-	hitBox newHitBox;
-
-	newHitBox.x = x;
-	newHitBox.y = y;
-	newHitBox.width = width;
-	newHitBox.height = height;
-
+	RectangleObject newHitBox(x, y, width, height);
 	globalHitBox.push_back(newHitBox);
 }
 
 // Add a new Player hit box
 void Map::addAceHitBox(int x, int y, int width, int height)
 {
-	hitBox newHitBox;
-
-	newHitBox.x = x;
-	newHitBox.y = y;
-	newHitBox.width = width;
-	newHitBox.height = height;
-
+	RectangleObject newHitBox(x, y, width, height);
 	aceHitBox.push_back(newHitBox);
 }
 
 // hit detection for global hitbox
-bool Map::checkGlobalHitBox(hitBox object)
+bool Map::checkGlobalHitBox(RectangleObject object)
 {
 		for(int i = 0; i < globalHitBox.size(); i++)
 		{
-			if(checkCollision(globalHitBox[i], object))
+			if(globalHitBox[i].checkCollision(object))
 				return true;
 		}
 	return false;

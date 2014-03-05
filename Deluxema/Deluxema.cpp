@@ -7,10 +7,13 @@
 #include "Map.h"
 #include "Input.h"
 #include "Ace.h"
+#include "RectangleObject.h"
 using namespace std;
 
-enum  eMode { eMapSetup, eClassSetup, eFiller };
+enum  eMode { eMapSetup, eGame, eFiller };
 eMode eGameMode = eMapSetup;
+
+double gravity = .5;
 
 // Variables
 
@@ -76,7 +79,12 @@ void mapSetup(Map *map)
 	map->addAceHitBox(-12, 0, 20, 500);
 	map->addAceHitBox(992, 0, 20, 500);
 	map->addGlobalHitBox(400, 100, 20, 20);
-	eGameMode = eFiller;
+	eGameMode = eGame;
+}
+
+void applyGravity(Ace *ace)
+{
+	ace->aceGravity(gravity);
 }
 
 void Deluxema(Map *map, Ace *ace)
@@ -89,33 +97,42 @@ void Deluxema(Map *map, Ace *ace)
 			mapSetup(map);
 			break;
 		}
-	case eFiller:
+	case eGame:
 		{	
+			applyGravity(ace);
 			if(checkUp())
 			{
-				ace->temp(0, -3);
-				while(map->checkGlobalHitBox(ace->getBody()))
-					ace->temp(0, 1);
+				ace->setFall(-10);
+				while(map->checkGlobalHitBox((RectangleObject)*ace))
+					ace->move(0, 1);
 			}	
 			else if(checkDown())
 			{
-				ace->temp(0, 3);
-				while(map->checkGlobalHitBox(ace->getBody()))
-					ace->temp(0, -1);
+				ace->move(0, 3);
+				while(map->checkGlobalHitBox((RectangleObject)*ace))
+					ace->move(0, -1);
 			}	
 			else if(checkRight())
 			{
-				ace->temp(3, 0);
-				while(map->checkGlobalHitBox(ace->getBody()))
-					ace->temp(-1, 0);
+				ace->move(3, 0);
+				while(map->checkGlobalHitBox((RectangleObject)*ace))
+					ace->move(-1, 0);
 			}	
 			else if(checkLeft())
 			{
-				ace->temp(-3, 0);
-				while(map->checkGlobalHitBox(ace->getBody()))
-					ace->temp(1, 0);
+				ace->move(-3, 0);
+				while(map->checkGlobalHitBox((RectangleObject)*ace))
+					ace->move(1, 0);
 			}
-			ace->setAnimation(Ace::eAnimation::eJumpSlice);
+
+			ace->move(0, ace->getFall());
+			while(map->checkGlobalHitBox((RectangleObject)*ace))
+			{
+				ace->setFall(0);
+				ace->move(0, -1);
+			}
+
+			ace->setAnimation(ace->eJumpSlice);
 			ace->playAnimation();
 			break;
 		}

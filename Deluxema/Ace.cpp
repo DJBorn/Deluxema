@@ -1,21 +1,23 @@
 #include <vector>
 
 // local functions
-#include "HitBox.h"
+#include "RectangleObject.h"
 #include "Animation.h"
 #include "Ace.h"
 
 using namespace std;
 
-
-Ace::Ace(int x, int y) 
+Ace::Ace(int x, int y)
 {
-	body.x = x;
-	body.y = y;
+	aceSpeed = 3;
+	aceFall = 0;
+
+	Ace::x = x;
+	Ace::y = y;
 	eStance = eStand;
 
-	body.width = 28;
-	body.height = 74;
+	width = 28;
+	height = 74;
 
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", 4, 2, 1, 1, 8, 6, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", 5, 2, 1, 1, 10, 3, 200, 200));
@@ -34,29 +36,29 @@ void Ace::playAnimation()
 {
 	if(eStance == eStand)
 	{
-		spriteX = body.x - 20;
-		spriteY = body.y - 12;
+		spriteX = x - 20;
+		spriteY = y - 12;
 		animations[0]->playAnimation(spriteX, spriteY);
 	}
 	if(eStance == eRun)
 	{
-		spriteX = body.x - 62;
-		spriteY = body.y - 14;
+		spriteX = x - 62;
+		spriteY = y - 14;
 		animations[1]->playAnimation(spriteX, spriteY);
 	}
 	if(eStance == eSlice)
 	{
-		spriteX = body.x - 86;
-		spriteY = body.y - 30;
+		spriteX = x - 86;
+		spriteY = y - 30;
 		animations[2]->playAnimation(spriteX, spriteY);
 	}
 	if(eStance == eJumpSlice)
 	{
-		spriteX = body.x - 108;
-		spriteY = body.y - 30;
+		spriteX = x - 108;
+		spriteY = y - 30;
 		animations[3]->playAnimation(spriteX, spriteY);
 	}
-	animations[4]->playAnimation(body.x, body.y);
+	animations[4]->playAnimation(x, y);
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
@@ -64,23 +66,28 @@ void Ace::setAnimation(Ace::eAnimation animation)
 	//for(int i = 0; i < animations.size(); i++)
 		//animations[i]->stopAnimation();
 
-
 	eStance = animation;
 
 }
 
-void Ace::moveCharacter(int xShift, int yShift)
+// set which way he is facing (True -> Right, False -> Left)
+void Ace::setDirection(bool right){facingRight = right;}
+
+// let gravity affect Ace's fall
+void Ace::aceGravity(double gravity)
 {
-	body.x += xShift;
-	body.y += yShift;
+	aceFall += gravity;
 }
 
-void Ace::temp(int x, int y)
-{
-	body.x += x;
-	body.y += y;
-}
+void Ace::setFall(double fall){aceFall = fall;}
+double Ace::getFall(){ return aceFall;}
+int Ace::getSpeed(){ return aceSpeed;}
 
+void Ace::move(int x, int y)
+{
+	Ace::x += x;
+	Ace::y += y;
+}
 /* TEMPORARY
 class Character
 {

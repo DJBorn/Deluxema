@@ -163,10 +163,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HitBox.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\idAssigner.cpp"
 				>
 			</File>
@@ -179,7 +175,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Object.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ReadMe.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\RectangleObject.cpp"
 				>
 			</File>
 		</Filter>
@@ -199,10 +203,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HitBox.h"
-				>
-			</File>
-			<File
 				RelativePath=".\idAssigner.h"
 				>
 			</File>
@@ -212,6 +212,14 @@
 			</File>
 			<File
 				RelativePath=".\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Object.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RectangleObject.h"
 				>
 			</File>
 		</Filter>
