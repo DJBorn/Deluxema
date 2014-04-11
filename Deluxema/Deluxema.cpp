@@ -87,42 +87,61 @@ void applyGravity(Ace *ace)
 }
 void controlAce(Ace *ace, Map *map)
 {
-	int aceHorizonalMove = 0;
-	ace->setAnimation(ace->eStand);
+	int aceHorizontalMove = 0;
 
-	if(checkZ() && !ace->getFlying())
+	// if the user presses Z, jump
+	if(checkZ() && !ace->getFlying() && !ace->checkStance(ace->eSlice))
 	{
 		ace->setFall(-18);
 	}
 	
-	if(checkX() && !ace->getFlying())
+	// Set the animation here
+
+	// if the user presses X on the ground, or is already doing a slice, do a stand slice
+	if(!ace->getFlying() && checkX() || ace->checkStance(ace->eSlice))
 	{
 		ace->setAnimation(ace->eSlice);
+	}
+	else if((checkX() || ace->checkStance(ace->eJumpSlice)) && ace->getFlying() )
+	{
+		ace->setAnimation(ace->eJumpSlice);
+	}
+	else if(checkRight() || checkLeft())
+	{
+		ace->setAnimation(ace->eRun);
+		if(ace->getFlying())
+			ace->setAnimation(ace->eJump);
+	}
+	else
+	{	
+		ace->setAnimation(ace->eStand);
+		if(ace->getFlying())
+			ace->setAnimation(ace->eJump);
 	}
 
 	if(checkRight())
 	{
-		if(!ace->getFacingRight())
-			ace->changeDirection();
-
-		ace->setAnimation(ace->eRun);
-
-		aceHorizonalMove = ace->getSpeed();
+		if(!ace->checkStance(ace->eSlice))
+		{
+			if(!ace->getFacingRight() && !ace->checkStance(ace->eJumpSlice))
+				ace->changeDirection();
+			aceHorizontalMove = ace->getSpeed();
+		}
 	}	
 	else if(checkLeft())
 	{
-		if(ace->getFacingRight())
-			ace->changeDirection();
-		aceHorizonalMove = ace->getSpeed() * -1;
-		ace->setAnimation(ace->eRun);
-
+		if(!ace->checkStance(ace->eSlice))
+		{
+			if(ace->getFacingRight() && !ace->checkStance(ace->eJumpSlice))
+				ace->changeDirection();
+			aceHorizontalMove = ace->getSpeed() * -1;
+		}
 	}
 
-	if(ace->getFlying())
-		ace->setAnimation(ace->eJump);
+	//ace->setAnimation(ace->eHurt);
 	ace->playAnimation();
 	
-	ace->move(aceHorizonalMove, ace->getFall(), map);
+	ace->move(aceHorizontalMove, ace->getFall(), map);
 
 }
 void Deluxema(Map *map, Ace *ace)

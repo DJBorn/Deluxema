@@ -37,12 +37,13 @@ Animation::~Animation()
 	deleteid(id);
 }
 
-void Animation::playAnimation(int x, int y)
+
+void Animation::playAnimation(int x, int y, int eventFrame, bool repeat, bool *ended)
 {
 	// increase the delay counter
 	delay++;
 
-	// set the next frame with the delay has finished
+	// set the next frame when the delay has finished
 	if(delay == maxDelay)
 	{
 		delay = 0;
@@ -55,7 +56,11 @@ void Animation::playAnimation(int x, int y)
 
 		// if it went over its max frame, reset the frame to the start frame
 		if(curFrame > maxFrame)
+		{
 			curFrame = startFrame;
+			if(!repeat)
+				*ended = true;
+		}
 	}
 	// refresh the sprite
 	int addFlip = 0;
@@ -67,7 +72,13 @@ void Animation::playAnimation(int x, int y)
 	dbShowSprite(id);
 }
 
-void Animation::stopAnimation(){ dbHideSprite(id);}
+void Animation::stopAnimation()
+{ 
+	// reset the animation
+	curFrame = startFrame;
+	// hide the sprite
+	dbHideSprite(id);
+}
 
 void Animation::flipAnimation() 
 { 

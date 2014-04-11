@@ -17,7 +17,7 @@ public:
 	~Ace();
 
 	// enum for which animation he is in
-	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump};
+	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump, eHurt};
 
 	// play an animation
 	void playAnimation();
@@ -39,6 +39,9 @@ public:
 	void aceGravity(double gravity);
 
 	void move(int x, int y, Map *map);
+	
+	// Check if the given stance is Ace's current stance
+	bool checkStance(eAnimation stance);
 private:
 	int leftConstant;
 	eAnimation eStance;
