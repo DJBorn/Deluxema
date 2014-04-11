@@ -32,6 +32,7 @@ Ace::Ace(int x, int y)
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 1, 1, 10, 2, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 1, 1, 9, 2, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 1, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 1, 1, 1, 1, 200, 200));
 	//animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 0, 0, 0, 1, 1, 1, 1, 1, 1, 200, 200)); //TEMPORARY GET RID
 }
 
@@ -43,25 +44,44 @@ Ace::~Ace()
 
 void Ace::playAnimation()
 {
+	bool ended = false;
 	if(eStance == eStand)
-		animations[0]->playAnimation(x, y);
+		animations[0]->playAnimation(x, y, 0, true, &ended);
 	if(eStance == eRun)
-		animations[1]->playAnimation(x, y);
+		animations[1]->playAnimation(x, y, 0, true, &ended);
 	if(eStance == eSlice)
-		animations[2]->playAnimation(x, y);
+	{
+		animations[2]->playAnimation(x, y, 4, false, &ended);
+		if(ended)
+			eStance = eStand;
+	}
 	if(eStance == eJumpSlice)
-		animations[3]->playAnimation(x, y);
+	{
+		animations[3]->playAnimation(x, y, 0, false, &ended);
+		if(ended)
+			eStance = eJump;
+	}
 	if(eStance == eJump)
-		animations[4]->playAnimation(x, y);
-	//animations[5]->playAnimation(x, y); // TEMPORARY GET RID
+		animations[4]->playAnimation(x, y, 0, true, &ended);
+	if(eStance == eHurt)
+		animations[5]->playAnimation(x, y, 0, true, &ended);
+	//animations[6]->playAnimation(x, y); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
 {
-	for(int i = 0; i < animations.size(); i++)
-	{
-		animations[i]->stopAnimation();
-	}
+	if(eStance != eStand)
+		animations[0]->stopAnimation();
+	if(eStance != eRun)
+		animations[1]->stopAnimation();
+	if(eStance != eSlice)
+		animations[2]->stopAnimation();
+	if(eStance != eJumpSlice)
+		animations[3]->stopAnimation();
+	if(eStance != eJump)
+		animations[4]->stopAnimation();
+	if(eStance != eHurt)
+		animations[5]->stopAnimation();
 
 	eStance = animation;
 }
@@ -84,7 +104,14 @@ void Ace::aceGravity(double gravity)
 
 bool Ace::getFlying(){return flying;}
 
-void Ace::setFall(double fall){aceFall = fall;}
+void Ace::setFall(double fall)
+{
+	aceFall = fall;
+
+	// if Ace's fall is negative (he's going up) set flying to true
+	if(fall < 0)
+		flying = true;
+}
 double Ace::getFall(){ return aceFall;}
 int Ace::getSpeed(){ return aceSpeed;}
 
@@ -112,6 +139,13 @@ void Ace::move(int x, int y, Map *map)
 		aceFall = 0;
 		flying = false;
 	}
+}
+
+bool Ace::checkStance(Ace::eAnimation stance)
+{
+	if(stance == eStance)
+		return true;
+	return false;
 }
 /* TEMPORARY
 class Character
