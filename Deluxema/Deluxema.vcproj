@@ -186,6 +186,10 @@
 				RelativePath=".\RectangleObject.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Sound.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -220,6 +224,10 @@
 			</File>
 			<File
 				RelativePath=".\RectangleObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Sound.h"
 				>
 			</File>
 		</Filter>

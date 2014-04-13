@@ -38,7 +38,7 @@ Animation::~Animation()
 }
 
 
-void Animation::playAnimation(int x, int y, int eventFrame, bool repeat, bool *ended)
+void Animation::playAnimation(int x, int y, int *frame, bool repeat, bool *ended)
 {
 	// increase the delay counter
 	delay++;
@@ -50,6 +50,7 @@ void Animation::playAnimation(int x, int y, int eventFrame, bool repeat, bool *e
 
 		// set the frame
 		dbSetSpriteFrame(id, curFrame);
+		*frame = curFrame;
 
 		// set the next frame
 		curFrame++;

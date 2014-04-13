@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Map.h"
 #include "Ace.h"
+#include "Sound.h"
 
 using namespace std;
 
@@ -45,31 +46,37 @@ Ace::~Ace()
 void Ace::playAnimation()
 {
 	bool ended = false;
+	int frame;
 	if(eStance == eStand)
-		animations[0]->playAnimation(x, y, 0, true, &ended);
+		animations[0]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eRun)
-		animations[1]->playAnimation(x, y, 0, true, &ended);
+		animations[1]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eSlice)
 	{
-		animations[2]->playAnimation(x, y, 4, false, &ended);
+		animations[2]->playAnimation(x, y, &frame, false, &ended);
+		if(frame == 1)
+			playAceSlice();
 		if(ended)
 			eStance = eStand;
 	}
 	if(eStance == eJumpSlice)
 	{
-		animations[3]->playAnimation(x, y, 0, false, &ended);
+		animations[3]->playAnimation(x, y, &frame, false, &ended);
+		if(frame == 1)
+			playAceSlice();
 		if(ended)
 			eStance = eJump;
 	}
 	if(eStance == eJump)
-		animations[4]->playAnimation(x, y, 0, true, &ended);
+		animations[4]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eHurt)
-		animations[5]->playAnimation(x, y, 0, true, &ended);
+		animations[5]->playAnimation(x, y, &frame, true, &ended);
 	//animations[6]->playAnimation(x, y); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
 {
+	eStance = animation;
 	if(eStance != eStand)
 		animations[0]->stopAnimation();
 	if(eStance != eRun)
@@ -83,7 +90,6 @@ void Ace::setAnimation(Ace::eAnimation animation)
 	if(eStance != eHurt)
 		animations[5]->stopAnimation();
 
-	eStance = animation;
 }
 
 // set which way he is facing (True -> Right, False -> Left)

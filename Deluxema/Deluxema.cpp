@@ -8,6 +8,12 @@
 #include "Input.h"
 #include "Ace.h"
 #include "RectangleObject.h"
+#include "Sound.h"
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 using namespace std;
 
 enum  eMode { eMapSetup, eGame, eFiller };
@@ -70,6 +76,9 @@ void setup()
 
 	// Transparent color
 	dbSetImageColorKey ( 255, 0, 255 );
+
+	// Setup all sounds
+	SoundSetup();
 }
 
 // Map setup creates all the hit boxes where the player and robots shouldn't go
@@ -92,6 +101,7 @@ void controlAce(Ace *ace, Map *map)
 	// if the user presses Z, jump
 	if(checkZ() && !ace->getFlying() && !ace->checkStance(ace->eSlice))
 	{
+		playAceJump();
 		ace->setFall(-18);
 	}
 	
@@ -152,7 +162,22 @@ void Deluxema(Map *map, Ace *ace)
 	case eMapSetup:
 		{
 			mapSetup(map);
-			break;
+				ace->setAnimation(ace->eRun);
+				for(int i = 0; i < 24; i++)
+					ace->playAnimation();
+				ace->setAnimation(ace->eJump);
+				for(int i = 0; i < 24; i++)
+					ace->playAnimation();
+				ace->setAnimation(ace->eJumpSlice);
+				for(int i = 0; i < 24; i++)
+					ace->playAnimation();
+				ace->setAnimation(ace->eSlice);
+				for(int i = 0; i < 24; i++)
+					ace->playAnimation();
+				ace->setAnimation(ace->eStand);
+				for(int i = 0; i < 24; i++)
+					ace->playAnimation();
+						break;
 		}
 	case eGame:
 		{	
@@ -196,6 +221,8 @@ void DarkGDK ( void )
 
 	// Delete objects
 	delete map;
+	deleteSounds();
+	_CrtDumpMemoryLeaks();
 	return;
 }
 
@@ -203,19 +230,5 @@ void DarkGDK ( void )
 
 /*
 	PLAY SPRITES ALL ATLEAST ONCE BEFORE USING (weird buggy glitch that occurs only on first run of animations)
-	ace->setAnimation(ace->eRun);
-	for(int i = 0; i < 24; i++)
-		ace->playAnimation();
-	ace->setAnimation(ace->eJump);
-	for(int i = 0; i < 24; i++)
-		ace->playAnimation();
-	ace->setAnimation(ace->eJumpSlice);
-	for(int i = 0; i < 24; i++)
-		ace->playAnimation();
-	ace->setAnimation(ace->eSlice);
-	for(int i = 0; i < 24; i++)
-		ace->playAnimation();
-	ace->setAnimation(ace->eStand);
-	for(int i = 0; i < 24; i++)
-		ace->playAnimation();
+
 */
