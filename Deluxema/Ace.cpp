@@ -9,7 +9,8 @@
 
 using namespace std;
 
-Ace::Ace(int x, int y)
+// Position and create his attacks when Ace is created
+Ace::Ace(int x, int y) : groundSlice(0, 0, 44, 38), airSlice(0, 0, 44, 38)
 {
 	aceSpeed = 5;
 	aceFall = 0;
@@ -26,15 +27,19 @@ Ace::Ace(int x, int y)
 	width = 28;
 	height = 74;
 
+	groundSlicing = false;
+
+
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 1, 1, 8, 6, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", -62, -14, 50, 5, 2, 1, 1, 10, 3, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 1, 1, 10, 2, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 1, 1, 9, 2, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 1, 1, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 1, 1, 1, 1, 200, 200));
-	//animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 0, 0, 0, 1, 1, 1, 1, 1, 1, 200, 200)); //TEMPORARY GET RID
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 1, 8, 10, 200, 200)); // delay is 6
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", -62, -14, 50, 5, 2, 0, 1, 10, 10, 200, 200)); // delay is 3
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 1, 10, 10, 200, 200));// delay is 2
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 1, 9, 2, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//acehitboxh.bmp", 0, 0, 0, 1, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 20, -20, 0, 1, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
 }
 
 Ace::~Ace()
@@ -46,7 +51,7 @@ Ace::~Ace()
 void Ace::playAnimation()
 {
 	bool ended = false;
-	int frame;
+	int frame = -1;
 	if(eStance == eStand)
 		animations[0]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eRun)
@@ -54,10 +59,24 @@ void Ace::playAnimation()
 	if(eStance == eSlice)
 	{
 		animations[2]->playAnimation(x, y, &frame, false, &ended);
+		// If this animation started, play the slice sound
 		if(frame == 1)
 			playAceSlice();
+
+		// If this reaches his slicing frame, activate his ground slice attack
+		if(frame == 4)
+		{
+			groundSlicing = true;
+			animations[7]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID	
+		}
+		else
+			groundSlicing = false;
+
+		// When this animation ends, Ace is standing
 		if(ended)
+		{
 			eStance = eStand;
+		}
 	}
 	if(eStance == eJumpSlice)
 	{
@@ -71,7 +90,7 @@ void Ace::playAnimation()
 		animations[4]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eHurt)
 		animations[5]->playAnimation(x, y, &frame, true, &ended);
-	//animations[6]->playAnimation(x, y); // TEMPORARY GET RID
+	animations[6]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
@@ -89,6 +108,8 @@ void Ace::setAnimation(Ace::eAnimation animation)
 		animations[4]->stopAnimation();
 	if(eStance != eHurt)
 		animations[5]->stopAnimation();
+	//if(!groundSlicing)
+		//animations[7]->stopAnimation(); // TEMPORARY CALIBRATION ANIMATION
 
 }
 
@@ -133,11 +154,15 @@ void Ace::move(int x, int y, Map *map)
 	}
 
 	if(y < 0)
+	{
 		flying = true;
+	}
 	Ace::y += y;
 
 	while(map->checkAceHitBox((RectangleObject)*this))
 	{
+		if(flying)
+			stopAceSlice();
 		if(y > 0)
 			Ace::y -= 1;
 		else
@@ -153,6 +178,7 @@ bool Ace::checkStance(Ace::eAnimation stance)
 		return true;
 	return false;
 }
+
 /* TEMPORARY
 class Character
 {

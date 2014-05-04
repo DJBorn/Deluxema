@@ -5,6 +5,7 @@
 
 class RectangleObject : public Object
 {
+	friend class Ace;
 protected:
 	int width;
 	int height;

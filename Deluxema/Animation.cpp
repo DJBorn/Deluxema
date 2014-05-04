@@ -48,12 +48,15 @@ void Animation::playAnimation(int x, int y, int *frame, bool repeat, bool *ended
 	{
 		delay = 0;
 
+
+		// set the next frame
+		curFrame++;
+
 		// set the frame
 		dbSetSpriteFrame(id, curFrame);
 		*frame = curFrame;
 
-		// set the next frame
-		curFrame++;
+
 
 		// if it went over its max frame, reset the frame to the start frame
 		if(curFrame > maxFrame)
@@ -69,8 +72,8 @@ void Animation::playAnimation(int x, int y, int *frame, bool repeat, bool *ended
 		addFlip = flip;
 
 	// position the sprite and display it
-	dbSprite(id, x + Animation::x + addFlip, y + Animation::y, id);
 	dbShowSprite(id);
+	dbSprite(id, x + Animation::x + addFlip, y + Animation::y, id);
 }
 
 void Animation::stopAnimation()
@@ -79,6 +82,7 @@ void Animation::stopAnimation()
 	curFrame = startFrame;
 	// hide the sprite
 	dbHideSprite(id);
+	delay = maxDelay - 1;
 }
 
 void Animation::flipAnimation() 

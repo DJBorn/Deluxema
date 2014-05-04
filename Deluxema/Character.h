@@ -9,10 +9,7 @@
 class Character : public RectangleObject
 {
 protected:
-	int spriteX;
-	int spriteY;
 
-	RectangleObject weapon;
 	vector<Animation*> animations;
 	Character();
 

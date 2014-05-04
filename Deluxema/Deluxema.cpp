@@ -79,6 +79,8 @@ void setup()
 
 	// Setup all sounds
 	SoundSetup();
+
+	playMainTheme();
 }
 
 // Map setup creates all the hit boxes where the player and robots shouldn't go
@@ -209,7 +211,8 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace);}
+				Deluxema(map, ace);
+			}
 
 		// exit if escape key is pressed
 		if ( dbEscapeKey ( ) )
