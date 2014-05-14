@@ -35,7 +35,7 @@ void stopAceSlice()
 
 void playMainTheme()
 {
-	dbLoopMusic(mainThemeId);
+	//dbLoopMusic(mainThemeId);
 }
 
 

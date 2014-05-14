@@ -56,9 +56,13 @@ void Animation::playAnimation(int x, int y, int *frame, bool repeat, bool *ended
 		dbSetSpriteFrame(id, curFrame);
 		*frame = curFrame;
 
+	
+		// if the animation is on loop and it has reached its max frame, then reset the animation
+		if(curFrame == maxFrame && repeat)
+			curFrame = startFrame;
 
-
-		// if it went over its max frame, reset the frame to the start frame
+		// if it went over its max frame, reset the frame to the start frame ( the reason is because it should run the last frame
+		// atleast once before exiting this animation, which it will after this if statement since we declared *ended as true)
 		if(curFrame > maxFrame)
 		{
 			curFrame = startFrame;

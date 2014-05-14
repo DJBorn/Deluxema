@@ -43,9 +43,8 @@ public:
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
 private:
-	bool groundSlicing;
-	RectangleObject groundSlice;
-	RectangleObject airSlice;
+	bool Slicing;
+	RectangleObject Slice;
 	int leftConstant;
 	eAnimation eStance;
 	bool facingRight;

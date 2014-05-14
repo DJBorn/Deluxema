@@ -9,10 +9,7 @@
 #include "Ace.h"
 #include "RectangleObject.h"
 #include "Sound.h"
-
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+#include <vld.h>
 
 using namespace std;
 
@@ -163,7 +160,7 @@ void Deluxema(Map *map, Ace *ace)
 	{
 	case eMapSetup:
 		{
-			mapSetup(map);
+			mapSetup(map);/*
 				ace->setAnimation(ace->eRun);
 				for(int i = 0; i < 24; i++)
 					ace->playAnimation();
@@ -175,7 +172,7 @@ void Deluxema(Map *map, Ace *ace)
 					ace->playAnimation();
 				ace->setAnimation(ace->eSlice);
 				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
+					ace->playAnimation();*/
 				ace->setAnimation(ace->eStand);
 				for(int i = 0; i < 24; i++)
 					ace->playAnimation();
@@ -199,7 +196,7 @@ void DarkGDK ( void )
 
 	// Create objects
 	Map *map = new Map();
-	Ace *ace = new Ace(50, 50);
+	Ace *ace = new Ace(50, 311);
 	
 
 	int time = 0;
@@ -224,8 +221,9 @@ void DarkGDK ( void )
 
 	// Delete objects
 	delete map;
+	delete ace;
 	deleteSounds();
-	_CrtDumpMemoryLeaks();
+
 	return;
 }
 
