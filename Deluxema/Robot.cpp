@@ -10,25 +10,16 @@
 using namespace std;
 
 // Position and create his attacks when Robot is created
-Robot::Robot(int x, int y) : Punch(0, 0, 44, 38)
+Robot::Robot(int x, int y) : Character(44, 38)
 {
-	robotSpeed = 5;
-	robotFall = 0;
-
-	leftConstant = 0;
+	speed = 5;
 
 	Robot::x = x;
 	Robot::y = y;
-	//eStance = eStand;
-
-	facingRight = true;
-	flying = false;
+	eStance = eStand;
 
 	width = 28;
 	height = 74;
-
-	Punching = false;
-
 
 	// add all of Robot's animations
 								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
@@ -57,25 +48,6 @@ void Robot::setAnimation(Robot::eAnimation animation)
 {
 }
 
-// set which way he is facing (True -> Right, False -> Left)
-void Robot::changeDirection()
-{
-}
-
-bool Robot::getFacingRight() { return facingRight;}
-
-// let gravity affect Ace's fall
-void Robot::robotGravity(double gravity)
-{
-}
-
-bool Robot::getFlying(){return flying;}
-
-void Robot::setFall(double fall)
-{
-}
-double Robot::getFall(){ return robotFall;}
-int Robot::getSpeed(){ return robotSpeed;}
 
 void Robot::move(int x, int y, Map *map)
 {

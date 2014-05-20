@@ -10,24 +10,17 @@
 using namespace std;
 
 // Position and create his attacks when Ace is created
-Ace::Ace(int x, int y) : Slice(0, 0, 44, 38)
+Ace::Ace(int x, int y) : Character(44, 38)
 {
-	aceSpeed = 5;
-	aceFall = 0;
-
-	leftConstant = 0;
+	speed = 5;
 
 	Ace::x = x;
 	Ace::y = y;
-	//eStance = eStand;
+	eStance = eStand;
 
-	facingRight = true;
-	flying = false;
 
 	width = 28;
 	height = 74;
-
-	Slicing = false;
 
 
 	// add all of Ace's animations
@@ -63,22 +56,22 @@ void Ace::playAnimation()
 		if(frame == 1)
 			playAceSlice();
 
-		// If this reaches his slicing frame, activate his slice attack
+		// If this reaches his attacking frame, activate his slice attack
 		if(frame == 4)
 		{
-			Slicing = true;
+			attacking = true;
 			int addFlip = 0;
 
 			// reposition Ace's slice hit box
 			if(!facingRight)
 				addFlip = -160;
-			Slice.x = x + 50 + addFlip;
-			Slice.y = y - 10;
+			attack.x = x + 50 + addFlip;
+			attack.y = y - 10;
 
-			animations[7]->playAnimation(Slice.x, Slice.y, &frame, true, &ended); // TEMPORARY GET RID	
+			animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
-			Slicing = false;
+			attacking = false;
 
 		// When this animation ends, Ace is standing
 		if(ended)
@@ -92,22 +85,22 @@ void Ace::playAnimation()
 		if(frame == 1)
 			playAceSlice();
 
-		// If this reaches his slicing frame, activate his slice attack
+		// If this reaches his attacking frame, activate his slice attack
 		if(frame == 4)
 		{
-			Slicing = true;
+			attacking = true;
 			int addFlip = 0;
 
 			// reposition Ace's slice hit box
 			if(!facingRight)
 				addFlip = -116;
-			Slice.x = x + 28 + addFlip;
-			Slice.y = y - 12;
+			attack.x = x + 28 + addFlip;
+			attack.y = y - 12;
 
-			animations[7]->playAnimation(Slice.x, Slice.y, &frame, true, &ended); // TEMPORARY GET RID	
+			animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
-			Slicing = false;
+			attacking = false;
 
 		if(ended)
 			eStance = eJump;
@@ -139,34 +132,6 @@ void Ace::setAnimation(Ace::eAnimation animation)
 
 }
 
-// set which way he is facing (True -> Right, False -> Left)
-void Ace::changeDirection()
-{
-	facingRight = !facingRight;
-	for (int i = 0; i < animations.size(); i++)
-		animations[i]->flipAnimation();
-}
-
-bool Ace::getFacingRight() { return facingRight;}
-
-// let gravity affect Ace's fall
-void Ace::aceGravity(double gravity)
-{
-	aceFall += gravity;
-}
-
-bool Ace::getFlying(){return flying;}
-
-void Ace::setFall(double fall)
-{
-	aceFall = fall;
-
-	// if Ace's fall is negative (he's going up) set flying to true
-	if(fall < 0)
-		flying = true;
-}
-double Ace::getFall(){ return aceFall;}
-int Ace::getSpeed(){ return aceSpeed;}
 
 void Ace::move(int x, int y, Map *map)
 {
@@ -193,7 +158,7 @@ void Ace::move(int x, int y, Map *map)
 			Ace::y -= 1;
 		else
 			Ace::y += 1;
-		aceFall = 0;
+		fall = 0;
 		flying = false;
 	}
 }
@@ -204,23 +169,3 @@ bool Ace::checkStance(Ace::eAnimation stance)
 		return true;
 	return false;
 }
-
-/* TEMPORARY
-class Character
-{
-protected:
-	hitBox body;
-	hitBox weapon;
-	vector<Animation> animations;
-
-	void moveCharacter(int xShift, int yShift);
-public:
-	// Destructor
-	virtual ~Character();
-	
-	// Virtual functions
-
-	virtual void playAnimation() = 0;
-	
-};
-*/

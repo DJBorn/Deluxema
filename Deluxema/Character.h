@@ -12,6 +12,14 @@ protected:
 
 	vector<Animation*> animations;
 	Character();
+	Character(int attackWidth, int attackHeight);
+	
+	bool attacking;
+	RectangleObject attack;
+	bool facingRight;
+	double fall;
+	bool flying;
+	int speed;
 
 public:
 
@@ -20,6 +28,22 @@ public:
 	
 	// Virtual functions
 	virtual void playAnimation() = 0;
+
+	// check if he is facing right
+	bool getFacingRight();
+
+	// set which way he is facing (True -> Right, False -> Left)
+	void changeDirection();
+
+	void setFall(double fall);
+
+	double getFall();
+	int getSpeed();
+	bool getFlying();
+	
+	// Let gravity affect the character's fall
+	void Gravity(double gravity);
+
 
 	
 };

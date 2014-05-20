@@ -1,16 +1,16 @@
 #include "RectangleObject.h"
 
-RectangleObject::RectangleObject()
+RectangleObject::RectangleObject() : width(0), height(0)
 {
-	x = 0; y = 0; width = 0; height = 0;
+	x = 0; y = 0;
 }
 
 RectangleObject::RectangleObject(int x, int y, int width, int height)
 {
-	RectangleObject::x = x;
-	RectangleObject::y = y;
 	RectangleObject::width = width;
 	RectangleObject::height = height;
+	RectangleObject::x = x;
+	RectangleObject::y = y;
 }
 
 RectangleObject::~RectangleObject(){}

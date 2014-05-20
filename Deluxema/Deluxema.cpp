@@ -91,7 +91,7 @@ void mapSetup(Map *map)
 
 void applyGravity(Ace *ace)
 {
-	ace->aceGravity(gravity);
+	ace->Gravity(gravity);
 }
 void controlAce(Ace *ace, Map *map)
 {

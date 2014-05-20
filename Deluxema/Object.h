@@ -3,10 +3,9 @@
 
 class Object
 {
-protected:
+public:
 	int x;
 	int y;
-public:
 	~Object(){};
 };
 

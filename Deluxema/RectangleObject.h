@@ -5,11 +5,9 @@
 
 class RectangleObject : public Object
 {
-	friend class Ace;
-protected:
+public:
 	int width;
 	int height;
-public:
 	RectangleObject();
 	RectangleObject(int x, int y, int width, int height);
 	~RectangleObject();
