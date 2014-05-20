@@ -125,7 +125,7 @@ void controlAce(Ace *ace, Map *map)
 	{	
 		ace->setAnimation(ace->eStand);
 		if(ace->getFlying())
-			ace->setAnimation(ace->eJump);
+			ace->setAnimation(Ace::eJump);
 	}
 
 	if(checkRight())
