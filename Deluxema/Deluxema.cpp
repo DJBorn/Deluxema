@@ -18,7 +18,7 @@ enum  eMode { eMapSetup, eGame, eFiller };
 eMode eGameMode = eMapSetup;
 
 double gravity = 1;
-int numRobots = 20;
+int numRobots = 5;
 
 // Variables
 
@@ -99,8 +99,18 @@ void applyGravity(Ace *ace, vector<Robot*>* robots)
 		robots->at(i)->Gravity(gravity/8);
 	}
 }
-void controller(Ace *ace, Map *map)
+void controller(Ace *ace, vector<Robot*>* robots, Map *map)
 {
+	vector<RectangleObject> robotAttacks;
+	vector<bool> attackerFacingRight;
+	vector<bool> attacking;
+	for(int i = 0; i < robots->size(); i++)
+	{
+		robotAttacks.push_back(robots->at(i)->getAttack());
+		attackerFacingRight.push_back(robots->at(i)->getFacingRight());
+		attacking.push_back(robots->at(i)->Attacking());
+	}
+	ace->checkHurt(robotAttacks, attackerFacingRight, attacking);
 	ace->controlAce(map, checkZ(), checkX(), checkLeft(), checkRight());
 }
 
@@ -135,7 +145,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 	case eGame:
 		{	
 			applyGravity(ace, robots);
-			controller(ace, map);
+			controller(ace, robots, map);
 			robotAI(robots, ace, map);
 			break;
 		}
@@ -155,7 +165,7 @@ void DarkGDK ( void )
 	vector<Robot*>* robots = new vector<Robot*>;
 	for(int i = 0; i < numRobots; i++)
 	{
-		robots->push_back(new Robot(10*(i+1), 291));
+		robots->push_back(new Robot());
 	}
 	
 

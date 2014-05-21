@@ -16,7 +16,7 @@ public:
 	void initialize();
 
 	// Constructor and Destructor
-	Robot(int x, int y);
+	Robot();
 	~Robot();
 
 	// enum for which animation he is in
@@ -39,6 +39,7 @@ public:
 private:
 	int dashDelay;
 	int maxDashDelay;
+	bool punched;
 
 	int maxSpeed;
 

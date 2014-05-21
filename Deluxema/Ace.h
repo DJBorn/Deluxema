@@ -31,10 +31,13 @@ public:
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
 
+	void checkHurt(vector<RectangleObject> attacks, vector<bool> attackerFacingRight, vector<bool> attacking);
+
 	// Control ace given the inputs
 	void controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButton, bool rightButton);
 private:
 	eAnimation eStance;
+	int hurtSpeed;
 };
 
 #endif // _ACE_H_

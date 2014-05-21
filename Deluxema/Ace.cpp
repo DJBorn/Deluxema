@@ -76,7 +76,8 @@ void Ace::playAnimation()
 		// When this animation ends, Ace is standing
 		if(ended)
 		{
-			eStance = eStand;
+			setAnimation(eStand);
+			animations[0]->playAnimation(x, y, &frame, true, &ended);
 		}
 	}
 	if(eStance == eJumpSlice)
@@ -103,7 +104,10 @@ void Ace::playAnimation()
 			attacking = false;
 
 		if(ended)
-			eStance = eJump;
+		{
+			setAnimation(eJump);
+			animations[4]->playAnimation(x, y, &frame, true, &ended);
+		}
 	}
 	if(eStance == eJump)
 		animations[4]->playAnimation(x, y, &frame, true, &ended);
@@ -163,8 +167,26 @@ void Ace::move(int x, int y, Map *map)
 	}
 }
 
+void Ace::checkHurt(vector<RectangleObject> attacks, vector<bool> attackerFacingRight, vector<bool> attacking)
+{
+	if(eStance != eHurt)
+	{
+		for(int i = 0; i < attacks.size(); i++)
+		{
+			if(checkCollision(attacks.at(i)) && attacking.at(i))
+			{
+				setAnimation(eHurt);
+				if(!attackerFacingRight.at(i))
+					hurtSpeed = -6;
+				else
+					hurtSpeed = 6;
+				setFall(-10);
+			}
+		}
+	}
+}
 
-void Ace::controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButton, bool rightButton)
+void Ace::controlAce(Map *map,  bool jumpButton, bool sliceButton, bool leftButton, bool rightButton)
 {
 	/* Some of the logic in this function may look like it could be optimized but evertime
 	   setAnimation() is called, it resets all the other animations, so we must stay consistent
@@ -172,71 +194,84 @@ void Ace::controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButto
 
 	int aceHorizontalMove = 0;
 
-	// if ace was commanded to jump while on the ground, make him jump
-	if(jumpButton && !flying && eStance != eSlice)
+	if(!flying && eStance == eHurt)
 	{
-		playAceJump();
-		setFall(-18);
-	}
-	
-	// _____ANIMATIONS SET HERE_____
-
-	// if ace was commanded to slice on the ground, or is already doing a slice, do a stand slice
-	if(!flying && sliceButton || eStance == eSlice)
-	{
-		setAnimation(eSlice);
-	}
-
-	// if ace was commanded to slice in the air, do an air slice. Or continue if he was already doing one
-	else if((sliceButton || eStance == eJumpSlice) && flying )
-	{
-		setAnimation(eJumpSlice);
-	}
-
-	// if ace was commanded to move right or left, set the animation to run, or jump if he's flying
-	else if(rightButton || leftButton)
-	{
-		// make sure he's not attacking
-		attacking = false;
-
-		setAnimation(eRun);
-
-		// if he's in the air, then set the animation to jump
-		if(flying)
-			setAnimation(eJump);
-	}
-	else
-	{	
-		// make sure he's not attacking
-		attacking = false;
-
-		// if no commands are given, set the animation to stand, or jump if he's flying
 		setAnimation(eStand);
-		if(flying)
-			setAnimation(eJump);
+	}
+	// ace cannot move while hurt
+	if(eStance == eHurt)
+	{
+		aceHorizontalMove = hurtSpeed;
 	}
 
-	// _____ANIMATION SET STOPS HERE_____
-
-	// adjust ace's speed according to left and right commands
-	if(rightButton)
+	else
 	{
-		if(eStance != eSlice)
+		// if ace was commanded to jump while on the ground, make him jump
+		if(jumpButton && !flying && eStance != eSlice)
 		{
-			// if he's not facing right and he's moving right, change his direction
-			if(!facingRight && eStance != eJumpSlice)
-				changeDirection();
-			aceHorizontalMove = speed;
+			playAceJump();
+			setFall(-18);
 		}
-	}	
-	else if(leftButton)
-	{
-		if(eStance != eSlice)
+		
+		// _____ANIMATIONS SET HERE_____
+
+		// if ace was commanded to slice on the ground, or is already doing a slice, do a stand slice
+		if(!flying && sliceButton || eStance == eSlice)
 		{
-			// if he's facing right and he's moving left, change his direction
-			if(facingRight && eStance != eJumpSlice)
-				changeDirection();
-			aceHorizontalMove = speed * -1;
+			setAnimation(eSlice);
+		}
+
+		// if ace was commanded to slice in the air, do an air slice. Or continue if he was already doing one
+		else if((sliceButton || eStance == eJumpSlice) && flying )
+		{
+			setAnimation(eJumpSlice);
+		}
+
+		// if ace was commanded to move right or left, set the animation to run, or jump if he's flying
+		else if(rightButton || leftButton)
+		{
+			// make sure he's not attacking
+			attacking = false;
+
+			setAnimation(eRun);
+
+			// if he's in the air, then set the animation to jump
+			if(flying)
+				setAnimation(eJump);
+		}
+		else
+		{	
+			// make sure he's not attacking
+			attacking = false;
+
+			// if no commands are given, set the animation to stand, or jump if he's flying
+			setAnimation(eStand);
+			if(flying)
+				setAnimation(eJump);
+		}
+
+		// _____ANIMATION SET STOPS HERE_____
+
+		// adjust ace's speed according to left and right commands
+		if(rightButton)
+		{
+			if(eStance != eSlice)
+			{
+				// if he's not facing right and he's moving right, change his direction
+				if(!facingRight && eStance != eJumpSlice)
+					changeDirection();
+				aceHorizontalMove = speed;
+			}
+		}	
+		else if(leftButton)
+		{
+			if(eStance != eSlice)
+			{
+				// if he's facing right and he's moving left, change his direction
+				if(facingRight && eStance != eJumpSlice)
+					changeDirection();
+				aceHorizontalMove = speed * -1;
+			}
 		}
 	}
 

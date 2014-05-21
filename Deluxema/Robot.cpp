@@ -19,17 +19,19 @@ void Robot::initialize()
 	maxSpeedTimer = 0;
 	maxSpeedDuration = 20;
 	dashDelay = 0;
-	maxDashDelay = 120;
+	maxDashDelay = dbRnd(100) + 40;
 	speedingUp = false;
 	setAnimation(eStand);
+
+	x = dbRnd(500) - 1000;
+	if(dbRnd(1))
+		x = dbRnd(466) + 1500;
+	y = 291;
 }
 
 // Position and create his attacks when Robot is created
-Robot::Robot(int x, int y) : Character(48, 32)
+Robot::Robot() : Character(48, 32)
 {
-	Robot::x = x;
-	Robot::y = y;
-
 	respawnTimer = 0;
 	respawnDuration = 500;
 
@@ -92,7 +94,10 @@ void Robot::playAnimation()
 		else
 			attacking = false;
 		if(ended)
-			eStance = eRun;
+		{
+			setAnimation(eRun);
+			animations[2]->playAnimation(x, y, &frame, false, &ended);
+		}
 	}
 	if(eStance == eDie)
 	{
@@ -154,10 +159,6 @@ bool Robot::checkStance(Robot::eAnimation stance)
 
 void Robot::respawn()
 {
-	x = dbRnd(500) - 1000;
-	if(dbRnd(1))
-		x = dbRnd(466) + 1500;
-	y = 291;
 	initialize();
 }
 
@@ -205,10 +206,12 @@ void Robot::AI(Ace *ace, Map *map)
 			changeDirection();
 
 		// set the robot's max speed
-		maxSpeed = 10;
+		maxSpeed = 8;
 
 		// set the robot's max speed duration
-		maxSpeedDuration = dbRnd(5) + 30;
+		maxSpeedDuration = dbRnd(5) + 40;
+
+		punched = false;
 	}
 
 	// once the robot is able to dash set the initial values its dashing variables
@@ -263,8 +266,11 @@ void Robot::AI(Ace *ace, Map *map)
 		if(speed == 0)
 			setAnimation(eStand);
 		// otherwise, check if Ace is in range for a punch, then activate it
-		else if(abs((ace->x + ace->width/2) - (x + width/2)) < 200)
+		else if(abs((ace->x + ace->width/2) - (x + width/2)) < 200 && !punched || eStance == ePunch)
+		{
 			setAnimation(ePunch);
+			punched = true;
+		}
 
 		// set the movement for this frame
 		robotHorizontalMove = speed;
