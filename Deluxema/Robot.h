@@ -13,6 +13,8 @@
 class Robot : public Character
 {
 public:
+	void initialize();
+
 	// Constructor and Destructor
 	Robot(int x, int y);
 	~Robot();
@@ -26,6 +28,7 @@ public:
 	// Set which animation to play
 	void setAnimation(eAnimation animation);
 
+	void respawn();
 
 	void move(int x, int y, Map *map);
 	
@@ -34,6 +37,18 @@ public:
 
 	void AI(Ace *ace, Map *map);
 private:
+	int dashDelay;
+	int maxDashDelay;
+
+	int maxSpeed;
+
+	int maxSpeedDuration;
+	int maxSpeedTimer;
+
+	int respawnTimer;
+	int respawnDuration;
+	bool speedingUp;
+
 	eAnimation eStance;
 };
 

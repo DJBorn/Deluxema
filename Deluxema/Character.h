@@ -32,10 +32,16 @@ public:
 	// set which way he is facing (True -> Right, False -> Left)
 	void changeDirection();
 
+	bool getFacingRight();
+
 	void setFall(double fall);
 	
 	// Let gravity affect the character's fall
 	void Gravity(double gravity);
+
+	RectangleObject getAttack();
+
+	bool Attacking();
 };
 
 #endif // _CHARACTER_H_

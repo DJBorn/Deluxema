@@ -12,7 +12,7 @@ using namespace std;
 // Position and create his attacks when Ace is created
 Ace::Ace(int x, int y) : Character(88, 76)
 {
-	speed = 15; //speed is 5
+	speed = 5; //speed is 5
 
 	Ace::x = x;
 	Ace::y = y;
@@ -68,7 +68,7 @@ void Ace::playAnimation()
 			attack.x = x + 50 + addFlip;
 			attack.y = y - 10;
 
-			animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
+			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
 			attacking = false;
@@ -97,7 +97,7 @@ void Ace::playAnimation()
 			attack.x = x + 28 + addFlip;
 			attack.y = y - 12;
 
-			animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
+			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
 			attacking = false;
@@ -109,7 +109,7 @@ void Ace::playAnimation()
 		animations[4]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eHurt)
 		animations[5]->playAnimation(x, y, &frame, true, &ended);
-	animations[6]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID
+	//animations[6]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
@@ -196,6 +196,9 @@ void Ace::controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButto
 	// if ace was commanded to move right or left, set the animation to run, or jump if he's flying
 	else if(rightButton || leftButton)
 	{
+		// make sure he's not attacking
+		attacking = false;
+
 		setAnimation(eRun);
 
 		// if he's in the air, then set the animation to jump
@@ -204,6 +207,9 @@ void Ace::controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButto
 	}
 	else
 	{	
+		// make sure he's not attacking
+		attacking = false;
+
 		// if no commands are given, set the animation to stand, or jump if he's flying
 		setAnimation(eStand);
 		if(flying)
