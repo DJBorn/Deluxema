@@ -9,7 +9,7 @@ class Animation
 {
 public:
 	Animation(char* path, int x, int y, int flip, int width, int height, int startFrame,
-			  int curFrame, int maxFrame, int maxDelay, int priority, int scale);
+			  int maxFrame, int maxDelay, int priority, int scale);
 	~Animation();
 	
 	void playAnimation(int x, int y, int *frame, bool repeat, bool *ended);

@@ -25,14 +25,14 @@ Ace::Ace(int x, int y) : Character(44, 38)
 
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 0, 8, 8, 200, 200)); // delay is 6
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 0, 10, 3, 200, 200)); // delay is 3
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 0, 10, 2, 200, 200));// delay is 2
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 0, 9, 2, 200, 200)); // delay is 2
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 0, 0, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 1, 0, 0, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//acehitboxh.bmp", 0, 0, 0, 1, 1, 1, 0, 0, 1, 200, 200)); //TEMPORARY GET RID
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 1, 0, 0, 1, 199, 200)); //TEMPORARY GET RID
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 6
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 10, 3, 200, 200)); // delay is 3
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 10, 2, 200, 200));// delay is 2
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 200, 200)); // delay is 2
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
 }
 
 Ace::~Ace()
@@ -164,7 +164,7 @@ void Ace::move(int x, int y, Map *map)
 }
 
 
-void Ace::controlAce(Map *map, Ace::eControl control)
+void Ace::controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButton, bool rightButton)
 {
 	/* Some of the logic in this function may look like it could be optimized but evertime
 	   setAnimation() is called, it resets all the other animations, so we must stay consistent
@@ -173,7 +173,7 @@ void Ace::controlAce(Map *map, Ace::eControl control)
 	int aceHorizontalMove = 0;
 
 	// if ace was commanded to jump while on the ground, make him jump
-	if(control == eJumpButton && !flying && eStance != eSlice)
+	if(jumpButton && !flying && eStance != eSlice)
 	{
 		playAceJump();
 		setFall(-18);
@@ -182,19 +182,19 @@ void Ace::controlAce(Map *map, Ace::eControl control)
 	// _____ANIMATIONS SET HERE_____
 
 	// if ace was commanded to slice on the ground, or is already doing a slice, do a stand slice
-	if(!flying && control == eSliceButton || eStance == eSlice)
+	if(!flying && sliceButton || eStance == eSlice)
 	{
 		setAnimation(eSlice);
 	}
 
 	// if ace was commanded to slice in the air, do an air slice. Or continue if he was already doing one
-	else if((control == eSliceButton || eStance == eJumpSlice) && flying )
+	else if((sliceButton || eStance == eJumpSlice) && flying )
 	{
 		setAnimation(eJumpSlice);
 	}
 
 	// if ace was commanded to move right or left, set the animation to run, or jump if he's flying
-	else if(control == eRightButton || control == eLeftButton)
+	else if(rightButton || leftButton)
 	{
 		setAnimation(eRun);
 
@@ -213,7 +213,7 @@ void Ace::controlAce(Map *map, Ace::eControl control)
 	// _____ANIMATION SET STOPS HERE_____
 
 	// adjust ace's speed according to left and right commands
-	if(control == eRightButton)
+	if(rightButton)
 	{
 		if(eStance != eSlice)
 		{
@@ -223,7 +223,7 @@ void Ace::controlAce(Map *map, Ace::eControl control)
 			aceHorizontalMove = speed;
 		}
 	}	
-	else if(control == eLeftButton)
+	else if(leftButton)
 	{
 		if(eStance != eSlice)
 		{

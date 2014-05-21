@@ -95,17 +95,7 @@ void applyGravity(Ace *ace)
 }
 void controller(Ace *ace, Map *map)
 {
-	if(checkX())
-		ace->controlAce(map, Ace::eSliceButton);
-	else if(checkZ())
-		ace->controlAce(map, Ace::eJumpButton);
-	else if(checkLeft())
-		ace->controlAce(map, Ace::eLeftButton);
-	else if(checkRight())
-		ace->controlAce(map, Ace::eRightButton);
-	else
-		ace->controlAce(map, Ace::eNoButton);
-	
+	ace->controlAce(map, checkZ(), checkX(), checkLeft(), checkRight());
 }
 void Deluxema(Map *map, Ace *ace)
 {
@@ -126,11 +116,11 @@ void Deluxema(Map *map, Ace *ace)
 					ace->playAnimation();
 				ace->setAnimation(ace->eSlice);
 				for(int i = 0; i < 24; i++)
-					ace->playAnimation();*/
+					ace->playAnimation();
 				ace->setAnimation(ace->eStand);
 				for(int i = 0; i < 24; i++)
 					ace->playAnimation();
-						break;
+						break;*/
 		}
 	case eGame:
 		{	
@@ -180,10 +170,3 @@ void DarkGDK ( void )
 
 	return;
 }
-
-
-
-/*
-	PLAY SPRITES ALL ATLEAST ONCE BEFORE USING (weird buggy glitch that occurs only on first run of animations)
-
-*/

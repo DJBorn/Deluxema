@@ -1,19 +1,20 @@
 #include "DarkGDK.h"
 #include "Animation.h"
 #include "idAssigner.h"
+#include "Sound.h" // TEMPORARY
 
 using namespace std;
 
 // Create a new animation
 Animation::Animation(char* path, int x, int y, int flip, int width, int height, int startFrame,
-					 int curFrame, int maxFrame, int maxDelay, int priority, int scale)
+					int maxFrame, int maxDelay, int priority, int scale)
 {
 	Animation::x = x;
 	Animation::y = y;
 	Animation::flip = flip;
 	Animation::path = path;
 	Animation::startFrame = startFrame;
-	Animation::curFrame = curFrame;
+	Animation::curFrame = startFrame;
 	Animation::maxFrame = maxFrame;
 	Animation::delay = 0;
 	Animation::maxDelay = maxDelay;
@@ -55,7 +56,6 @@ void Animation::playAnimation(int x, int y, int *frame, bool repeat, bool *ended
 		// set the frame
 		dbSetSpriteFrame(id, curFrame);
 		*frame = curFrame;
-
 	
 		// if the animation is on loop and it has reached its max frame, then reset the animation
 		if(curFrame == maxFrame && repeat)
