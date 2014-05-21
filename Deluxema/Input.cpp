@@ -3,8 +3,8 @@
 
 //player input
 
-bool jumped = false;
-bool sliced = false;
+bool z = false;
+bool x = false;
 
 bool checkLeft( void )
 {
@@ -45,13 +45,13 @@ bool checkZ ( void )
 {
 	if(dbKeyState ( 44 ))
 	{
-		if(jumped)
+		if(z)
 			return false;
-		jumped = true;
-		return jumped;
+		z = true;
+		return z;
 	}
-	jumped = false;
-	return jumped;
+	z = false;
+	return z;
 }
 
 // check if the player presses X (Slice)
@@ -59,13 +59,13 @@ bool checkX ( void )
 {
 	if(dbKeyState ( 45 ))
 	{
-		if(sliced)
+		if(x)
 			return false;
-		sliced = true;
-		return sliced;
+		x = true;
+		return x;
 	}
-	sliced = false;
-	return sliced;
+	x = false;
+	return x;
 }
 
 // check if the player presses the enter key

@@ -26,9 +26,6 @@ void Character::changeDirection()
 		animations[i]->flipAnimation();
 }
 
-bool Character::getFacingRight() {return facingRight;}
-
-
 // let gravity affect the character's fall
 void Character::Gravity(double gravity)
 {
@@ -39,16 +36,7 @@ void Character::setFall(double fall)
 {
 	Character::fall = fall;
 
-	// if Ace's fall is negative (he's going up) set flying to true
+	// if the character's fall is negative (he's going up) set flying to true
 	if(fall < 0)
 		flying = true;
 }
-
-double Character::getFall()
-{ 
-	return fall;
-}
-
-bool Character::getFlying(){return flying;}
-
-int Character::getSpeed(){ return speed;}

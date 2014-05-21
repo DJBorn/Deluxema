@@ -18,6 +18,9 @@ public:
 
 	// enum for which animation he is in
 	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump, eHurt};
+	
+	// enum for controls
+	enum eControl {eLeftButton, eRightButton, eJumpButton, eSliceButton, eNoButton};
 
 	// play an animation
 	void playAnimation();
@@ -30,6 +33,9 @@ public:
 	
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
+
+	// Control ace given the inputs
+	void controlAce(Map *map, Ace::eControl control);
 private:
 	eAnimation eStance;
 };

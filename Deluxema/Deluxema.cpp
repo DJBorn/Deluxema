@@ -93,65 +93,19 @@ void applyGravity(Ace *ace)
 {
 	ace->Gravity(gravity);
 }
-void controlAce(Ace *ace, Map *map)
+void controller(Ace *ace, Map *map)
 {
-	int aceHorizontalMove = 0;
-
-	// if the user presses Z, jump
-	if(checkZ() && !ace->getFlying() && !ace->checkStance(ace->eSlice))
-	{
-		playAceJump();
-		ace->setFall(-18);
-	}
-	
-	// Set the animation here
-
-	// if the user presses X on the ground, or is already doing a slice, do a stand slice
-	if(!ace->getFlying() && checkX() || ace->checkStance(ace->eSlice))
-	{
-		ace->setAnimation(ace->eSlice);
-	}
-	else if((checkX() || ace->checkStance(ace->eJumpSlice)) && ace->getFlying() )
-	{
-		ace->setAnimation(ace->eJumpSlice);
-	}
-	else if(checkRight() || checkLeft())
-	{
-		ace->setAnimation(ace->eRun);
-		if(ace->getFlying())
-			ace->setAnimation(ace->eJump);
-	}
-	else
-	{	
-		ace->setAnimation(ace->eStand);
-		if(ace->getFlying())
-			ace->setAnimation(Ace::eJump);
-	}
-
-	if(checkRight())
-	{
-		if(!ace->checkStance(ace->eSlice))
-		{
-			if(!ace->getFacingRight() && !ace->checkStance(ace->eJumpSlice))
-				ace->changeDirection();
-			aceHorizontalMove = ace->getSpeed();
-		}
-	}	
+	if(checkX())
+		ace->controlAce(map, Ace::eSliceButton);
+	else if(checkZ())
+		ace->controlAce(map, Ace::eJumpButton);
 	else if(checkLeft())
-	{
-		if(!ace->checkStance(ace->eSlice))
-		{
-			if(ace->getFacingRight() && !ace->checkStance(ace->eJumpSlice))
-				ace->changeDirection();
-			aceHorizontalMove = ace->getSpeed() * -1;
-		}
-	}
-
-	//ace->setAnimation(ace->eHurt);
-	ace->playAnimation();
+		ace->controlAce(map, Ace::eLeftButton);
+	else if(checkRight())
+		ace->controlAce(map, Ace::eRightButton);
+	else
+		ace->controlAce(map, Ace::eNoButton);
 	
-	ace->move(aceHorizontalMove, ace->getFall(), map);
-
 }
 void Deluxema(Map *map, Ace *ace)
 {
@@ -181,7 +135,7 @@ void Deluxema(Map *map, Ace *ace)
 	case eGame:
 		{	
 			applyGravity(ace);
-			controlAce(ace, map);
+			controller(ace, map);
 			break;
 		}
 	}

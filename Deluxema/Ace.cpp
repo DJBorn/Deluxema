@@ -26,7 +26,7 @@ Ace::Ace(int x, int y) : Character(44, 38)
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 0, 8, 8, 200, 200)); // delay is 6
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp", -62, -14, 50, 5, 2, 0, 0, 10, 3, 200, 200)); // delay is 3
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 0, 10, 3, 200, 200)); // delay is 3
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 0, 10, 2, 200, 200));// delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 0, 9, 2, 200, 200)); // delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 1, 0, 0, 1, 200, 200));
@@ -163,9 +163,80 @@ void Ace::move(int x, int y, Map *map)
 	}
 }
 
-bool Ace::checkStance(Ace::eAnimation stance)
+
+void Ace::controlAce(Map *map, Ace::eControl control)
 {
-	if(stance == eStance)
-		return true;
-	return false;
+	/* Some of the logic in this function may look like it could be optimized but evertime
+	   setAnimation() is called, it resets all the other animations, so we must stay consistent
+	   with one animation at a time */
+
+	int aceHorizontalMove = 0;
+
+	// if ace was commanded to jump while on the ground, make him jump
+	if(control == eJumpButton && !flying && eStance != eSlice)
+	{
+		playAceJump();
+		setFall(-18);
+	}
+	
+	// _____ANIMATIONS SET HERE_____
+
+	// if ace was commanded to slice on the ground, or is already doing a slice, do a stand slice
+	if(!flying && control == eSliceButton || eStance == eSlice)
+	{
+		setAnimation(eSlice);
+	}
+
+	// if ace was commanded to slice in the air, do an air slice. Or continue if he was already doing one
+	else if((control == eSliceButton || eStance == eJumpSlice) && flying )
+	{
+		setAnimation(eJumpSlice);
+	}
+
+	// if ace was commanded to move right or left, set the animation to run, or jump if he's flying
+	else if(control == eRightButton || control == eLeftButton)
+	{
+		setAnimation(eRun);
+
+		// if he's in the air, then set the animation to jump
+		if(flying)
+			setAnimation(eJump);
+	}
+	else
+	{	
+		// if no commands are given, set the animation to stand, or jump if he's flying
+		setAnimation(eStand);
+		if(flying)
+			setAnimation(eJump);
+	}
+
+	// _____ANIMATION SET STOPS HERE_____
+
+	// adjust ace's speed according to left and right commands
+	if(control == eRightButton)
+	{
+		if(eStance != eSlice)
+		{
+			// if he's not facing right and he's moving right, change his direction
+			if(!facingRight && eStance != eJumpSlice)
+				changeDirection();
+			aceHorizontalMove = speed;
+		}
+	}	
+	else if(control == eLeftButton)
+	{
+		if(eStance != eSlice)
+		{
+			// if he's facing right and he's moving left, change his direction
+			if(facingRight && eStance != eJumpSlice)
+				changeDirection();
+			aceHorizontalMove = speed * -1;
+		}
+	}
+
+	// play ace's animation
+	playAnimation();
+
+	// move ace on the map
+	move(aceHorizontalMove, fall, map);
 }
