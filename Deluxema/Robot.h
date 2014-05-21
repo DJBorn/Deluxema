@@ -6,6 +6,7 @@
 #include "RectangleObject.h"
 #include "Animation.h"
 #include "Character.h"
+#include "Ace.h"
 #include "Map.h"
 
 // Class for a generic character on the screen
@@ -17,7 +18,7 @@ public:
 	~Robot();
 
 	// enum for which animation he is in
-	enum eAnimation {eStand, eRun, ePunch, eDie};
+	enum eAnimation {eStand, eRun, eDash, ePunch, eDie};
 
 	// play an animation
 	void playAnimation();
@@ -30,6 +31,8 @@ public:
 	
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
+
+	void AI(Ace *ace, Map *map);
 private:
 	eAnimation eStance;
 };

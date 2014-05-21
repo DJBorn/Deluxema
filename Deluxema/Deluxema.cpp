@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Input.h"
 #include "Ace.h"
+#include "Robot.h"
 #include "RectangleObject.h"
 #include "Sound.h"
 #include <vld.h>
@@ -89,43 +90,41 @@ void mapSetup(Map *map)
 	eGameMode = eGame;
 }
 
-void applyGravity(Ace *ace)
+void applyGravity(Ace *ace, Robot *robot)
 {
 	ace->Gravity(gravity);
+	robot->Gravity(gravity);
 }
 void controller(Ace *ace, Map *map)
 {
 	ace->controlAce(map, checkZ(), checkX(), checkLeft(), checkRight());
 }
-void Deluxema(Map *map, Ace *ace)
+
+void robotAI(Robot *robot, Ace *ace, Map *map)
+{
+	robot->AI(ace, map);
+}
+
+
+void Deluxema(Map *map, Ace *ace, Robot *robot)
 {
 	// switch for game mode
 	switch ( eGameMode )
 	{
 	case eMapSetup:
 		{
-			mapSetup(map);/*
-				ace->setAnimation(ace->eRun);
-				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
-				ace->setAnimation(ace->eJump);
-				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
-				ace->setAnimation(ace->eJumpSlice);
-				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
-				ace->setAnimation(ace->eSlice);
-				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
-				ace->setAnimation(ace->eStand);
-				for(int i = 0; i < 24; i++)
-					ace->playAnimation();
-						break;*/
+			mapSetup(map);
+			for(int i = 0; i < 8; i++)
+				ace->playAnimation();
+			for(int i = 0; i < 12; i++)
+				robot->playAnimation();
+			break;
 		}
 	case eGame:
 		{	
-			applyGravity(ace);
+			applyGravity(ace, robot);
 			controller(ace, map);
+			robotAI(robot, ace, map);
 			break;
 		}
 	}
@@ -141,6 +140,7 @@ void DarkGDK ( void )
 	// Create objects
 	Map *map = new Map();
 	Ace *ace = new Ace(50, 311);
+	Robot *robot = new Robot(300, 291);
 	
 
 	int time = 0;
@@ -152,7 +152,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace);
+				Deluxema(map, ace, robot);
 			}
 
 		// exit if escape key is pressed

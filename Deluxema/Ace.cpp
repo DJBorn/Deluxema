@@ -10,9 +10,9 @@
 using namespace std;
 
 // Position and create his attacks when Ace is created
-Ace::Ace(int x, int y) : Character(44, 38)
+Ace::Ace(int x, int y) : Character(88, 76)
 {
-	speed = 5;
+	speed = 15; //speed is 5
 
 	Ace::x = x;
 	Ace::y = y;
@@ -24,14 +24,14 @@ Ace::Ace(int x, int y) : Character(44, 38)
 
 
 	// add all of Ace's animations
-								//x, y, flip, width, height, startFrame, curFrame, maxFrame, maxDelay, priority, scale
+								//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 6
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 10, 3, 200, 200)); // delay is 3
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 10, 2, 200, 200));// delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 200, 200)); // delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 0, 1, 1, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
+	animations.push_back(new Animation("includes//Sprites//Ace//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
 }
 
