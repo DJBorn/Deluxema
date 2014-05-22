@@ -10,7 +10,10 @@
 using namespace std;
 
 // Position and create his attacks when Ace is created
-Ace::Ace(int x, int y) : Character(88, 76)
+Ace::Ace(int x, int y) : Character(88, 76), 
+jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 100),
+attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 100),
+hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 100)
 {
 	speed = 5; //speed is 5
 
@@ -54,7 +57,7 @@ void Ace::playAnimation()
 		animations[2]->playAnimation(x, y, &frame, false, &ended);
 		// If this animation started, play the slice sound
 		if(frame == 1)
-			playAceSlice();
+			attackSound.playSound();
 
 		// If this reaches his attacking frame, activate his slice attack
 		if(frame == 4)
@@ -84,7 +87,7 @@ void Ace::playAnimation()
 	{
 		animations[3]->playAnimation(x, y, &frame, false, &ended);
 		if(frame == 1)
-			playAceSlice();
+			attackSound.playSound();
 
 		// If this reaches his attacking frame, activate his slice attack
 		if(frame == 4)
@@ -157,7 +160,7 @@ void Ace::move(int x, int y, Map *map)
 	while(map->checkAceHitBox((RectangleObject)*this))
 	{
 		if(flying)
-			stopAceSlice();
+			attackSound.stopSound();
 		if(y > 0)
 			Ace::y -= 1;
 		else
@@ -175,6 +178,7 @@ void Ace::checkHurt(vector<RectangleObject> attacks, vector<bool> attackerFacing
 		{
 			if(checkCollision(attacks.at(i)) && attacking.at(i))
 			{
+				hurtSound.playSound();
 				setAnimation(eHurt);
 				if(!attackerFacingRight.at(i))
 					hurtSpeed = -6;
@@ -209,7 +213,7 @@ void Ace::controlAce(Map *map,  bool jumpButton, bool sliceButton, bool leftButt
 		// if ace was commanded to jump while on the ground, make him jump
 		if(jumpButton && !flying && eStance != eSlice)
 		{
-			playAceJump();
+			jumpSound.playSound();
 			setFall(-18);
 		}
 		

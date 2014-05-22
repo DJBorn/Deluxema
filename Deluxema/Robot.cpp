@@ -23,14 +23,16 @@ void Robot::initialize()
 	speedingUp = false;
 	setAnimation(eStand);
 
-	x = dbRnd(500) - 1000;
+	x = dbRnd(100) - 300;
 	if(dbRnd(1))
-		x = dbRnd(466) + 1500;
+		x = dbRnd(100) + 1200;
 	y = 291;
 }
 
 // Position and create his attacks when Robot is created
-Robot::Robot() : Character(48, 32)
+Robot::Robot() : Character(48, 32),
+dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 100),
+deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 100)
 {
 	respawnTimer = 0;
 	respawnDuration = 500;
@@ -188,6 +190,7 @@ void Robot::AI(Ace *ace, Map *map)
 
 	if(ace->Attacking() && ace->getAttack().checkCollision(RectangleObject(*this)) && eStance != eDie)
 	{
+		deathSound.playSound();
 		if(ace->getFacingRight())
 			speed = 3;
 		else
@@ -206,10 +209,10 @@ void Robot::AI(Ace *ace, Map *map)
 			changeDirection();
 
 		// set the robot's max speed
-		maxSpeed = 8;
+		maxSpeed = 6;
 
 		// set the robot's max speed duration
-		maxSpeedDuration = dbRnd(5) + 40;
+		maxSpeedDuration = dbRnd(5) + 50;
 
 		punched = false;
 	}
@@ -217,6 +220,7 @@ void Robot::AI(Ace *ace, Map *map)
 	// once the robot is able to dash set the initial values its dashing variables
 	if(dashDelay == maxDashDelay)
 	{
+		dashSound.playSound();
 		// It will be speeding up initially
 		speedingUp = true;
 		// set the animation to dashing
@@ -264,7 +268,11 @@ void Robot::AI(Ace *ace, Map *map)
 
 		// if the robots speed is 0, he has finished his dash and is not standing
 		if(speed == 0)
+		{
+			// make sure he is not attacking
+			attacking = false;
 			setAnimation(eStand);
+		}
 		// otherwise, check if Ace is in range for a punch, then activate it
 		else if(abs((ace->x + ace->width/2) - (x + width/2)) < 200 && !punched || eStance == ePunch)
 		{

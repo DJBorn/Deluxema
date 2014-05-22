@@ -6,6 +6,7 @@
 #include "RectangleObject.h"
 #include "Animation.h"
 #include "Character.h"
+#include "Sound.h"
 #include "Ace.h"
 #include "Map.h"
 
@@ -49,6 +50,9 @@ private:
 	int respawnTimer;
 	int respawnDuration;
 	bool speedingUp;
+
+	Sound dashSound;
+	Sound deathSound;
 
 	eAnimation eStance;
 };

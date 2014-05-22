@@ -1,50 +1,28 @@
 #include "DarkGDK.h"
 #include "idAssigner.h"
+#include "Sound.h"
 
-int aceJumpId;
-int aceSliceId;
-int mainThemeId;
-
-void SoundSetup()
+Sound::Sound(char* path, int volume)
 {
-	aceJumpId = generateid();
-	aceSliceId = generateid();
-	mainThemeId = generateid();
-	dbLoadSound ( "includes//Sounds//Effects//Ace//Ace_Jump.wav" , aceJumpId );
-	dbLoadSound ( "includes//Sounds//Effects//Ace//Ace_Slice.wav" , aceSliceId );
-	dbLoadMusic ( "includes//Sounds//Music//Memeshikute.mp3" , mainThemeId );
-
-	dbSetSoundVolume(aceSliceId, 90);
-	dbSetMusicVolume(mainThemeId, 1);
+	Sound::volume = volume;
+	id = generateid();
+	dbLoadSound(path, id);
+	dbSetSoundVolume(id, volume);
 }
 
-void playAceJump()
+Sound::~Sound()
 {
-	dbPlaySound(aceJumpId);
+	dbDeleteSound(id);
+	deleteid(id);
 }
 
-void playAceSlice()
+void Sound::playSound()
 {
-	dbPlaySound(aceSliceId);
+	dbPlaySound(id);
 }
 
-void stopAceSlice()
+void Sound::stopSound()
 {
-	dbStopSound(aceSliceId);
+	dbStopSound(id);
 }
 
-void playMainTheme()
-{
-	//dbLoopMusic(mainThemeId);
-}
-
-
-void deleteSounds()
-{
-	dbDeleteSound(aceJumpId);
-	dbDeleteSound(aceSliceId);
-	dbDeleteMusic(mainThemeId);
-	deleteid(aceJumpId);
-	deleteid(aceSliceId);
-	deleteid(mainThemeId);
-}

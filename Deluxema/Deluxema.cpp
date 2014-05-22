@@ -9,7 +9,7 @@
 #include "Ace.h"
 #include "Robot.h"
 #include "RectangleObject.h"
-#include "Sound.h"
+#include "Music.h"
 #include <vld.h>
 
 using namespace std;
@@ -77,7 +77,7 @@ void setup()
 	dbSetImageColorKey ( 255, 0, 255 );
 
 	// Setup all sounds
-	SoundSetup();
+	MusicSetup();
 
 	playMainTheme();
 }
@@ -197,7 +197,7 @@ void DarkGDK ( void )
 	delete robots;
 	delete map;
 	delete ace;
-	deleteSounds();
+	deleteMusic();
 
 	return;
 }

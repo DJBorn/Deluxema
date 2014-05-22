@@ -1,10 +1,18 @@
-#pragma once
+#ifndef _SOUND_H_
+#define _SOUND_H_
 
-void SoundSetup();
+class Sound
+{
+public:
+	Sound(char* path, int volume);
+	~Sound();
 
-void playAceJump();
-void playAceSlice();
-void stopAceSlice();
-void playMainTheme();
+	void playSound();
+	void stopSound();
+private:
+	int id;
+	int volume;
+};
 
-void deleteSounds();
+
+#endif // _SOUND_H_

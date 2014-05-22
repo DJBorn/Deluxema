@@ -6,6 +6,7 @@
 #include "RectangleObject.h"
 #include "Animation.h"
 #include "Character.h"
+#include "Sound.h"
 #include "Map.h"
 
 // Class for a generic character on the screen
@@ -38,6 +39,10 @@ public:
 private:
 	eAnimation eStance;
 	int hurtSpeed;
+	Sound jumpSound;
+	Sound attackSound;
+	Sound hurtSound;
+
 };
 
 #endif // _ACE_H_
