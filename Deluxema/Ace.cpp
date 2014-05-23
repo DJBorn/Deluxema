@@ -7,6 +7,7 @@
 #include "Ace.h"
 #include "Sound.h"
 #include <vld.h>
+#include "DarkGDK.h" // temp
 using namespace std;
 
 // Position and create his attacks when Ace is created
@@ -21,14 +22,13 @@ hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 100)
 	Ace::y = y;
 	eStance = eStand;
 
-
 	width = 28;
 	height = 74;
 
 
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 6
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 10, 3, 200, 200)); // delay is 3
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 10, 2, 200, 200));// delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 200, 200)); // delay is 2
@@ -51,7 +51,9 @@ void Ace::playAnimation()
 	if(eStance == eStand)
 		animations[0]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eRun)
+	{
 		animations[1]->playAnimation(x, y, &frame, true, &ended);
+	}
 	if(eStance == eSlice)
 	{
 		animations[2]->playAnimation(x, y, &frame, false, &ended);

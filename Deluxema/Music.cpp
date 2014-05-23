@@ -5,9 +5,9 @@ int mainThemeId;
 void MusicSetup()
 {
 	mainThemeId = generateid();
-	dbLoadMusic ( "includes//Sounds//Music//Memeshikute.mp3" , mainThemeId );
+	dbLoadMusic ( "includes//Sounds//Music//MC Hotdog - Wo Ai Tai Mei.mp3" , mainThemeId ); // Memeshikute
 
-	dbSetMusicVolume(mainThemeId, 60);
+	dbSetMusicVolume(mainThemeId, 100);
 }
 
 void playMainTheme()

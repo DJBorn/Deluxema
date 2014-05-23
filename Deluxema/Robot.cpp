@@ -7,8 +7,8 @@
 #include "Map.h"
 #include "Robot.h"
 #include "Map.h"
-#include "Ace.h"
 #include "Sound.h"
+#include "Explosion.h"
 #include <vld.h>
 using namespace std;
 
@@ -22,6 +22,7 @@ void Robot::initialize()
 	maxDashDelay = dbRnd(100) + 40;
 	speedingUp = false;
 	setAnimation(eStand);
+	explosion.turnOffExplosion();
 
 	x = dbRnd(100) - 300;
 	if(dbRnd(1))
@@ -32,7 +33,8 @@ void Robot::initialize()
 // Position and create his attacks when Robot is created
 Robot::Robot() : Character(48, 32),
 dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 100),
-deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 100)
+deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 100),
+explosion()
 {
 	respawnTimer = 0;
 	respawnDuration = 500;
@@ -164,7 +166,7 @@ void Robot::respawn()
 	initialize();
 }
 
-void Robot::AI(Ace *ace, Map *map)
+void Robot::AI(Character *ace, Map *map)
 {
 	int robotHorizontalMove = 0;
 
@@ -188,8 +190,10 @@ void Robot::AI(Ace *ace, Map *map)
 	attack.y = y + 12;
 
 
+	// check if the Robot was hit by Ace
 	if(ace->Attacking() && ace->getAttack().checkCollision(RectangleObject(*this)) && eStance != eDie)
 	{
+		explosion.turnOnExplosion();
 		deathSound.playSound();
 		if(ace->getFacingRight())
 			speed = 3;
@@ -289,4 +293,9 @@ void Robot::AI(Ace *ace, Map *map)
 
 	// move the robot on the map
 	move(robotHorizontalMove, fall, map);
+}
+
+void Robot::playExplosion()
+{
+	explosion.playExplosion(x, x + width, y, y + height);
 }

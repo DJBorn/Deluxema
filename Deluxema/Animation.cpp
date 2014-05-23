@@ -1,7 +1,6 @@
 #include "DarkGDK.h"
 #include "Animation.h"
 #include "idAssigner.h"
-#include "Sound.h" // TEMPORARY
 
 using namespace std;
 
@@ -16,7 +15,7 @@ Animation::Animation(char* path, int x, int y, int flip, int width, int height, 
 	Animation::startFrame = startFrame;
 	Animation::curFrame = startFrame;
 	Animation::maxFrame = maxFrame;
-	Animation::delay = 0;
+	Animation::delay = maxDelay - 1;
 	Animation::maxDelay = maxDelay;
 	Animation::id = generateid();
 	flipped = false;

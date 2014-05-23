@@ -10,6 +10,7 @@
 #include "Robot.h"
 #include "RectangleObject.h"
 #include "Music.h"
+#include "Explosion.h"
 #include <vld.h>
 
 using namespace std;
@@ -18,7 +19,7 @@ enum  eMode { eMapSetup, eGame, eFiller };
 eMode eGameMode = eMapSetup;
 
 double gravity = 1;
-int numRobots = 5;
+int numRobots = 10;
 
 // Variables
 
@@ -94,7 +95,7 @@ void mapSetup(Map *map)
 void applyGravity(Ace *ace, vector<Robot*>* robots)
 {
 	ace->Gravity(gravity);
-	for(int i = 0; i < numRobots; i++)
+	for(int i = 0; i < robots->size(); i++)
 	{
 		robots->at(i)->Gravity(gravity/8);
 	}
@@ -116,14 +117,22 @@ void controller(Ace *ace, vector<Robot*>* robots, Map *map)
 
 void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
 {
-	for(int i = 0; i < numRobots; i++)
+	for(int i = 0; i < robots->size(); i++)
 	{
 		robots->at(i)->AI(ace, map);
 	}
 }
 
+void continuousAnimations(vector<Robot*>* robots)
+{
+	for(int i = 0; i < robots->size(); i++)
+	{
+		robots->at(i)->playExplosion();
+	}
+}
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
+
+void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *test)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -131,15 +140,6 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 	case eMapSetup:
 		{
 			mapSetup(map);
-			for(int i = 0; i < 8; i++)
-				ace->playAnimation();
-			for(int i = 0; i < 12; i++)
-			{
-				for(int i = 0; i < numRobots; i++)
-				{
-					robots->at(0)->playAnimation();
-				}
-			}
 			break;
 		}
 	case eGame:
@@ -147,6 +147,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 			applyGravity(ace, robots);
 			controller(ace, robots, map);
 			robotAI(robots, ace, map);
+			continuousAnimations(robots);
 			break;
 		}
 	}
@@ -161,8 +162,10 @@ void DarkGDK ( void )
 
 	// Create objects
 	Map *map = new Map();
-	Ace *ace = new Ace(50, 311);
+	Ace *ace = new Ace(486, 311);
 	vector<Robot*>* robots = new vector<Robot*>;
+	Explosion *test = new Explosion();
+
 	for(int i = 0; i < numRobots; i++)
 	{
 		robots->push_back(new Robot());
@@ -178,7 +181,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace, robots);
+				Deluxema(map, ace, robots, test);
 			}
 
 		// exit if escape key is pressed
@@ -190,7 +193,7 @@ void DarkGDK ( void )
 	}
 
 	// Delete objects
-	for(int i = 0; i < numRobots; i++)
+	for(int i = 0; i < robots->size(); i++)
 	{
 		delete robots->at(i);
 	}

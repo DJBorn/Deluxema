@@ -164,6 +164,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Explosion.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\idAssigner.cpp"
 				>
 			</File>
@@ -213,6 +217,10 @@
 			</File>
 			<File
 				RelativePath=".\Character.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Explosion.h"
 				>
 			</File>
 			<File

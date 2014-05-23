@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "Character.h"
 #include "Sound.h"
+#include "Explosion.h"
 #include "Ace.h"
 #include "Map.h"
 
@@ -36,7 +37,9 @@ public:
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
 
-	void AI(Ace *ace, Map *map);
+	void AI(Character *ace, Map *map);
+
+	void playExplosion();
 private:
 	int dashDelay;
 	int maxDashDelay;
@@ -53,6 +56,8 @@ private:
 
 	Sound dashSound;
 	Sound deathSound;
+
+	Explosion explosion;
 
 	eAnimation eStance;
 };
