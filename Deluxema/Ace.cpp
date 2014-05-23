@@ -10,7 +10,7 @@
 using namespace std;
 
 // Position and create his attacks when Ace is created
-Ace::Ace(int x, int y) : Character(88, 76), 
+Ace::Ace(int x, int y) : Character(124, 76), 
 jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 100),
 attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 100),
 hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 100)
@@ -67,8 +67,8 @@ void Ace::playAnimation()
 
 			// reposition Ace's slice hit box
 			if(!facingRight)
-				addFlip = -160;
-			attack.x = x + 50 + addFlip;
+				addFlip = -124;
+			attack.x = x + 14 + addFlip;
 			attack.y = y - 10;
 
 			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
@@ -97,8 +97,8 @@ void Ace::playAnimation()
 
 			// reposition Ace's slice hit box
 			if(!facingRight)
-				addFlip = -116;
-			attack.x = x + 28 + addFlip;
+				addFlip = -80;
+			attack.x = x - 8 + addFlip;
 			attack.y = y - 12;
 
 			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
@@ -178,12 +178,22 @@ void Ace::checkHurt(vector<RectangleObject> attacks, vector<bool> attackerFacing
 		{
 			if(checkCollision(attacks.at(i)) && attacking.at(i))
 			{
+				// make sure he's not attacking
+				Ace::attacking = false;
+
+				// play his hurt sound
 				hurtSound.playSound();
+
+				// set his animation so he's getting hurt
 				setAnimation(eHurt);
+
+				// set the speed and direction in which he's flying horizontally
 				if(!attackerFacingRight.at(i))
 					hurtSpeed = -6;
 				else
 					hurtSpeed = 6;
+
+				// make him jump up a bit
 				setFall(-10);
 			}
 		}

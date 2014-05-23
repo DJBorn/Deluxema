@@ -7,7 +7,7 @@ void MusicSetup()
 	mainThemeId = generateid();
 	dbLoadMusic ( "includes//Sounds//Music//Memeshikute.mp3" , mainThemeId );
 
-	dbSetMusicVolume(mainThemeId, 20);
+	dbSetMusicVolume(mainThemeId, 60);
 }
 
 void playMainTheme()
