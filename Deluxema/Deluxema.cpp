@@ -2,7 +2,6 @@
 #include "DarkGDK.h"
 //#include "wtypes.h"
 
-
 // Header Files
 #include "Map.h"
 #include "Input.h"
@@ -11,7 +10,6 @@
 #include "RectangleObject.h"
 #include "Music.h"
 #include "Explosion.h"
-#include <vld.h>
 
 using namespace std;
 
@@ -119,6 +117,7 @@ void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
 {
 	for(int i = 0; i < robots->size(); i++)
 	{
+		robots->at(i)->checkDeath(ace->getAttack(), ace->getFacingRight(), ace->Attacking());
 		robots->at(i)->AI(ace, map);
 	}
 }

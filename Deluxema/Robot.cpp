@@ -9,7 +9,6 @@
 #include "Map.h"
 #include "Sound.h"
 #include "Explosion.h"
-#include <vld.h>
 using namespace std;
 
 void Robot::initialize()
@@ -166,7 +165,24 @@ void Robot::respawn()
 	initialize();
 }
 
-void Robot::AI(Character *ace, Map *map)
+void Robot::checkDeath(RectangleObject attack, bool attackerFacingRight, bool attacking)
+{
+	// check if the Robot was hit by Ace
+	if(attacking && attack.checkCollision(RectangleObject(*this)) && eStance != eDie)
+	{
+		explosion.turnOnExplosion();
+		deathSound.playSound();
+		if(attackerFacingRight)
+			speed = 3;
+		else
+			speed = -3;
+		fall = -4;
+		flying = true;
+		setAnimation(eDie);
+	}
+}
+
+void Robot::AI(RectangleObject *target, Map *map)
 {
 	int robotHorizontalMove = 0;
 
@@ -190,26 +206,12 @@ void Robot::AI(Character *ace, Map *map)
 	attack.y = y + 12;
 
 
-	// check if the Robot was hit by Ace
-	if(ace->Attacking() && ace->getAttack().checkCollision(RectangleObject(*this)) && eStance != eDie)
-	{
-		explosion.turnOnExplosion();
-		deathSound.playSound();
-		if(ace->getFacingRight())
-			speed = 3;
-		else
-			speed = -3;
-		fall = -4;
-		setAnimation(eDie);
-	}
-
-
 	// the robot can only change directions when it is standing
 	if(eStance == eStand)
 	{
-		if((ace->x + ace->width/2) < (x + width/2) && facingRight)
+		if((target->x + target->width/2) < (x + width/2) && facingRight)
 			changeDirection();
-		else if((ace->x + ace->width/2) >= (x + width/2) && !facingRight)
+		else if((target->x + target->width/2) >= (x + width/2) && !facingRight)
 			changeDirection();
 
 		// set the robot's max speed
@@ -278,7 +280,7 @@ void Robot::AI(Character *ace, Map *map)
 			setAnimation(eStand);
 		}
 		// otherwise, check if Ace is in range for a punch, then activate it
-		else if(abs((ace->x + ace->width/2) - (x + width/2)) < 200 && !punched || eStance == ePunch)
+		else if(abs((target->x + target->width/2) - (x + width/2)) < 200 && !punched || eStance == ePunch)
 		{
 			setAnimation(ePunch);
 			punched = true;

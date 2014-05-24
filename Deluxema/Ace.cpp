@@ -6,7 +6,6 @@
 #include "Map.h"
 #include "Ace.h"
 #include "Sound.h"
-#include <vld.h>
 #include "DarkGDK.h" // temp
 using namespace std;
 
