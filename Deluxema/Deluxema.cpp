@@ -10,6 +10,8 @@
 #include "RectangleObject.h"
 #include "Music.h"
 #include "Explosion.h"
+#include "Number.h"
+#include "idAssigner.h"
 
 using namespace std;
 
@@ -18,10 +20,10 @@ eMode eGameMode = eMapSetup;
 
 double gravity = 1;
 int numRobots = 10;
+int score = 0;
+int scoreId;
 
 // Variables
-
-
 
 // Get the horizontal and vertical screen sizes in pixel
 void GetDesktopResolution(int& horizontal, int& vertical)
@@ -75,6 +77,11 @@ void setup()
 	// Transparent color
 	dbSetImageColorKey ( 255, 0, 255 );
 
+	scoreId = generateid();
+	dbCreateAnimatedSprite(scoreId, "includes//Sprites//Effects//Score.bmp", 1, 1, scoreId);
+	dbSprite(scoreId, 200, 0, scoreId);
+	dbSetSpritePriority(scoreId, 202);
+
 	// Setup all sounds
 	MusicSetup();
 
@@ -117,7 +124,7 @@ void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
 {
 	for(int i = 0; i < robots->size(); i++)
 	{
-		robots->at(i)->checkDeath(ace->getAttack(), ace->getFacingRight(), ace->Attacking());
+		robots->at(i)->checkDeath(ace->getAttack(), ace->getFacingRight(), ace->Attacking(), score);
 		robots->at(i)->AI(ace, map);
 	}
 }
@@ -147,6 +154,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *test)
 			controller(ace, robots, map);
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
+			displayNumber(score, 300, 0);
 			break;
 		}
 	}
@@ -164,6 +172,7 @@ void DarkGDK ( void )
 	Ace *ace = new Ace(486, 311);
 	vector<Robot*>* robots = new vector<Robot*>;
 	Explosion *test = new Explosion();
+	createNumbers();
 
 	for(int i = 0; i < numRobots; i++)
 	{
@@ -191,6 +200,7 @@ void DarkGDK ( void )
 		dbSync ( );
 	}
 
+	deleteNumbers();
 	// Delete objects
 	for(int i = 0; i < robots->size(); i++)
 	{

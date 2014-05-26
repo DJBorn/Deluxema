@@ -11,9 +11,9 @@ using namespace std;
 
 // Position and create his attacks when Ace is created
 Ace::Ace(int x, int y) : Character(124, 76), 
-jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 100),
-attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 100),
-hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 100)
+jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 80),
+attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 80),
+hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 80)
 {
 	speed = 5; //speed is 5
 

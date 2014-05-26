@@ -31,8 +31,8 @@ void Robot::initialize()
 
 // Position and create his attacks when Robot is created
 Robot::Robot() : Character(48, 32),
-dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 100),
-deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 100),
+dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 80),
+deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 80),
 explosion()
 {
 	respawnTimer = 0;
@@ -165,11 +165,12 @@ void Robot::respawn()
 	initialize();
 }
 
-void Robot::checkDeath(RectangleObject attack, bool attackerFacingRight, bool attacking)
+void Robot::checkDeath(RectangleObject attack, bool attackerFacingRight, bool attacking, int &score)
 {
 	// check if the Robot was hit by Ace
 	if(attacking && attack.checkCollision(RectangleObject(*this)) && eStance != eDie)
 	{
+		score++;
 		explosion.turnOnExplosion();
 		deathSound.playSound();
 		if(attackerFacingRight)

@@ -184,6 +184,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Number.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Object.cpp"
 				>
 			</File>
@@ -237,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\Music.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Number.h"
 				>
 			</File>
 			<File

@@ -37,7 +37,7 @@ public:
 	// Check if the given stance is Ace's current stance
 	bool checkStance(eAnimation stance);
 
-	void checkDeath(RectangleObject attack, bool attackerFacingRight, bool attacking);
+	void checkDeath(RectangleObject attack, bool attackerFacingRight, bool attacking, int &score);
 
 	void AI(RectangleObject *target, Map *map);
 

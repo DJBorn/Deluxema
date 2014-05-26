@@ -17,14 +17,14 @@ Explosion::Explosion()
 	startSprite->curFrame = 0;
 	startSprite->id = generateid();
 	startSprite->activated = false;
-	startSprite->explosionSound = new Sound("includes//Sounds//Effects//Explosion.wav", 92);
+	startSprite->explosionSound = new Sound("includes//Sounds//Effects//Explosion.wav", 74);
 
 	sprite* previousSprite = startSprite;
 
 	dbCreateAnimatedSprite(startSprite->id,"includes//Sprites//Effects//Explosion.bmp", 4, 2, startSprite->id);
 	dbScaleSprite(startSprite->id, 200);
 	dbSetSpritePriority(startSprite->id, 201);
-	//dbHideSprite(startSprite->id);
+	dbHideSprite(startSprite->id);
 
 	// divide the number of frames in the explosion sprite (8) by the frequency and roof it
 	// to get how many sprites are require to play the loop of explosions (iterate from 1 since we already created the first one)
@@ -35,7 +35,7 @@ Explosion::Explosion()
 		newSprite->curFrame = 0;
 		newSprite->id = generateid();
 		newSprite->activated = false;
-		newSprite->explosionSound = new Sound("includes//Sounds//Effects//Explosion.wav", 92);
+		newSprite->explosionSound = new Sound("includes//Sounds//Effects//Explosion.wav", 74);
 
 		previousSprite->child = newSprite;
 		previousSprite = newSprite;
