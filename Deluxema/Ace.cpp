@@ -25,6 +25,7 @@ hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85)
 	height = 74;
 
 
+
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 8
@@ -35,6 +36,7 @@ hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85)
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
+	changeDirection();
 }
 
 Ace::~Ace()

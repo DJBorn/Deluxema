@@ -15,6 +15,7 @@ Map::Map()
 
 	// Backdrop for background
  	dbCreateAnimatedSprite (idMap, "includes//Sprites//Map//Ace_House.bmp", 1, 1, idMap);
+	dbScaleSprite(idMap, 200);
 
 	// Create a sprite for this image
 	dbSprite ( idMap, xMap, yMap, idMap );
