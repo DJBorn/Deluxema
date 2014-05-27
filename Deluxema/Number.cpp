@@ -2,48 +2,61 @@
 #include "Number.h"
 #include "idAssigner.h"
 #include <math.h>
+#include <vector>
 
-int id[4];
+std::vector<int> id;
 
-void createNumbers()
+void createNumbers(int n)
 {
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < n; i++)
 	{	
-		id[i] = generateid();
+		id.push_back(generateid());
 		// load the sprite
-		dbCreateAnimatedSprite(id[i], "includes//Sprites//Effects//Numbers.bmp", 10, 1, id[i]);
+		dbCreateAnimatedSprite(id.back(), "includes//Sprites//Effects//Numbers.bmp", 10, 1, id.back());
 		// scale the sprite
-		dbScaleSprite(id[i], 100);
+		dbScaleSprite(id.back(), 100);
 		// set the sprite priority
-		dbSetSpritePriority(id[i], 202);
+		dbSetSpritePriority(id.back(), 202);
 		// initially hide the sprite till called to play
-		dbHideSprite(id[i]);
+		dbHideSprite(id.back());
 
 	}
 }
 
 void displayNumber(int n, int x, int y)
 {
-	int number[4] = {-1 , -1, -1, -1};
-	for(int i = 3; i >= 0; i--)
+	std::vector<int> number;
+
+	// determine the number of digits in the number
+	int digits = 0;
+	int i = n;
+	while(i)
 	{
-		if(n != 0)
-			number[i] = n % 10;
+		digits++;
+		i /= 10;
+	}
+
+	// hide the number sprites initially
+	for(int i = 0; i < id.size(); i++)
+	{
+		dbHideSprite(id.at(i));
+	}
+
+	for(int i = 0; i < digits; i++)
+	{
+		number.push_back(n % 10);
 		n /= 10;
 	}
 
 	int shift = 0;
-	for(int i = 0; i < 4; i++)
+	int index = 0;
+	for(int i = number.size() - 1; i >= 0; i--)
 	{
-		if(number[i] >= 0)
-		{
-			dbShowSprite(id[i]);
-			dbSetSpriteFrame(id[i], number[i] + 1);
-			dbSprite(id[i], x + shift, y, id[i]);
-			shift += dbSpriteWidth(id[i])/10;
-		}
-		else
-			dbHideSprite(id[i]);
+		dbShowSprite(id.at(index));
+		dbSetSpriteFrame(id.at(index), number.at(i) + 1);
+		dbSprite(id.at(index), x + shift, y, id.at(index));
+		shift += dbSpriteWidth(id.at(index))/10;
+		index++;
 	}
 }
 void deleteNumbers()

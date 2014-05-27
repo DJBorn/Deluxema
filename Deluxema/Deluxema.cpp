@@ -19,7 +19,7 @@ enum  eMode { eMapSetup, eGame, eFiller };
 eMode eGameMode = eMapSetup;
 
 double gravity = 1;
-int numRobots = 10;
+int numRobots = 5;
 int score = 0;
 int scoreId;
 
@@ -138,7 +138,7 @@ void continuousAnimations(vector<Robot*>* robots)
 }
 
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *test)
+void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -171,8 +171,7 @@ void DarkGDK ( void )
 	Map *map = new Map();
 	Ace *ace = new Ace(486, 311);
 	vector<Robot*>* robots = new vector<Robot*>;
-	Explosion *test = new Explosion();
-	createNumbers();
+	createNumbers(4);
 
 	for(int i = 0; i < numRobots; i++)
 	{
@@ -189,7 +188,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace, robots, test);
+				Deluxema(map, ace, robots);
 			}
 
 		// exit if escape key is pressed
