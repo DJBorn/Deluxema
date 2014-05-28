@@ -13,7 +13,8 @@ using namespace std;
 Ace::Ace(int x, int y) : Character(124, 76), 
 jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 85),
 attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 85),
-hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85)
+hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85),
+portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 85)
 {
 	speed = 5; //speed is 5
 
@@ -147,6 +148,8 @@ void Ace::playAnimation()
 	if(eStance == eGettingSword)
 	{
 		animations[10]->playAnimation(x, y, &frame, false, &ended);
+		if(frame == 3)
+			portalSound.playSound();
 		if(ended)
 		{
 			changeDirection();

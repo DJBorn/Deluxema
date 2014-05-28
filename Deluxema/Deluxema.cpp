@@ -11,6 +11,7 @@
 #include "Music.h"
 #include "Explosion.h"
 #include "Number.h"
+#include "Sound.h"
 #include "idAssigner.h"
 #include <math.h>
 
@@ -25,6 +26,7 @@ int score = 0;
 int scoreId;
 int titleId;
 int startId;
+int startSoundId;
 int startDelay = 0;
 int startFrame = 1;
 int controlsId;
@@ -107,6 +109,10 @@ void setup()
 	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 378, controlsId);;
 	dbSetSpritePriority(controlsId, 202);
 
+	startSoundId = generateid();
+	dbLoadSound("includes//Sounds//Effects//Start_Select.wav", startSoundId);
+	dbSetSoundVolume(startSoundId, 90);
+
 	// Setup all sounds
 	MusicSetup();
 
@@ -139,6 +145,7 @@ void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftE
 	}
 	if(checkEnter() && !enteringGame)
 	{
+		dbPlaySound(startSoundId);
 		dbHideSprite(titleId);
 		dbHideSprite(startId);
 		dbHideSprite(controlsId);

@@ -42,6 +42,7 @@ private:
 	Sound jumpSound;
 	Sound attackSound;
 	Sound hurtSound;
+	Sound portalSound;
 
 };
 
