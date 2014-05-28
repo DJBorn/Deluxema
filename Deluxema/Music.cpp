@@ -12,7 +12,7 @@ void MusicSetup()
 
 void playMainTheme()
 {
-	dbLoopMusic(mainThemeId);
+	//dbLoopMusic(mainThemeId);
 }
 
 void deleteMusic()

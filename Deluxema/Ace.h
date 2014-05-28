@@ -18,7 +18,7 @@ public:
 	~Ace();
 
 	// enum for which animation he is in
-	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump, eHurt};
+	enum eAnimation {eStand, eRun, eSlice, eJumpSlice, eJump, eHurt, eSleeping, eWakingUp, eSitting, eGettingUp, eGettingSword};
 
 	// play an animation
 	void playAnimation();

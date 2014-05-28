@@ -15,13 +15,15 @@
 
 using namespace std;
 
-enum  eMode { eMapSetup, eGame, eFiller };
+enum  eMode { eMapSetup, eGame, eTitleScreen };
 eMode eGameMode = eMapSetup;
 
 double gravity = 1;
 int numRobots = 5;
 int score = 0;
 int scoreId;
+bool enteringGame = false;
+int explosionTimer = 0;
 
 // Variables
 
@@ -94,7 +96,71 @@ void mapSetup(Map *map)
 	map->addGlobalHitBox(-1000, 386, 3000, 50);
 	map->addAceHitBox(-12, 0, 20, 500);
 	map->addAceHitBox(992, 0, 20, 500);
-	eGameMode = eGame;
+	eGameMode = eTitleScreen;
+}
+
+void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftExplosion)
+{
+	if(!enteringGame)
+		ace->setAnimation(Ace::eSleeping);
+	if(checkEnter() && !enteringGame)
+	{
+		enteringGame = true;
+		ace->setAnimation(Ace::eWakingUp);
+	}
+	
+	if(enteringGame)
+	{
+		if(ace->checkStance(Ace::eWakingUp))
+		{
+			// play the explosions and increment timer
+			explosionTimer++;
+			rightExplosion->turnOnExplosion();
+			leftExplosion->turnOnExplosion();
+			rightExplosion->playExplosion(0, 6, 150, 220);
+			leftExplosion->playExplosion(994, 1000, 150, 220);
+			ace->setAnimation(Ace::eWakingUp);
+		}
+		else if(ace->checkStance(Ace::eSitting))
+		{
+			// increment explosionTimer
+			explosionTimer++;
+			ace->setAnimation(Ace::eSitting);
+
+			// play the explosion for 100 iterations
+			if(explosionTimer < 120)
+			{
+				rightExplosion->playExplosion(0, 6, 150, 220);
+				leftExplosion->playExplosion(994, 1000, 150, 220);
+			}
+			// finish off the remaining explosions and change the map without the side windows
+			else if(explosionTimer < 150)
+			{
+				map->changeToBreached();
+				rightExplosion->turnOffExplosion();
+				leftExplosion->turnOffExplosion();
+				rightExplosion->playExplosion(0, 3, 110, 146);
+				leftExplosion->playExplosion(997, 1000, 110, 146);
+			}
+			// then switch to Ace getting up 
+			else
+			{
+				ace->setAnimation(Ace::eGettingUp);
+			}
+		}
+		else if(ace->checkStance(Ace::eGettingUp))
+		{
+			ace->setAnimation(Ace::eGettingUp);
+		}
+		else if(ace->checkStance(Ace::eGettingSword))
+		{
+			ace->setAnimation(Ace::eGettingSword);
+		}
+		else
+			eGameMode = eGame;
+
+	}
+	ace->playAnimation();
 }
 
 void applyGravity(Ace *ace, vector<Robot*>* robots)
@@ -138,7 +204,7 @@ void continuousAnimations(vector<Robot*>* robots)
 }
 
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
+void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *rightExplosion, Explosion *leftExplosion)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -146,6 +212,11 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 	case eMapSetup:
 		{
 			mapSetup(map);
+			break;
+		}
+	case eTitleScreen:
+		{
+			titleScreen(ace, map, rightExplosion, leftExplosion);
 			break;
 		}
 	case eGame:
@@ -169,8 +240,11 @@ void DarkGDK ( void )
 
 	// Create objects
 	Map *map = new Map();
-	Ace *ace = new Ace(486, 311);
+	Ace *ace = new Ace(484, 311);
 	vector<Robot*>* robots = new vector<Robot*>;
+	Explosion *leftExplosion, *rightExplosion;
+	leftExplosion = new Explosion();
+	rightExplosion = new Explosion();
 	createNumbers(4);
 
 	for(int i = 0; i < numRobots; i++)
@@ -188,7 +262,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace, robots);
+				Deluxema(map, ace, robots, rightExplosion, leftExplosion);
 			}
 
 		// exit if escape key is pressed
@@ -199,8 +273,11 @@ void DarkGDK ( void )
 		dbSync ( );
 	}
 
-	deleteNumbers();
 	// Delete objects
+	
+	delete leftExplosion;
+	delete rightExplosion;
+	deleteNumbers();
 	for(int i = 0; i < robots->size(); i++)
 	{
 		delete robots->at(i);

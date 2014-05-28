@@ -12,10 +12,13 @@ Map::Map()
 	yMap = 0;
 	// Get an id
 	idMap = generateid();
+	idMapBreached = generateid();
 
 	// Backdrop for background
  	dbCreateAnimatedSprite (idMap, "includes//Sprites//Map//Ace_House.bmp", 1, 1, idMap);
+ 	dbCreateAnimatedSprite (idMapBreached, "includes//Sprites//Map//Ace_House_Breached.bmp", 1, 1, idMapBreached);
 	dbScaleSprite(idMap, 200);
+	dbScaleSprite(idMapBreached, 200);
 
 	// Create a sprite for this image
 	dbSprite ( idMap, xMap, yMap, idMap );
@@ -24,7 +27,9 @@ Map::Map()
 Map::~Map()
 {
 	dbDeleteSprite(idMap);
+	dbDeleteSprite(idMapBreached);
 	deleteid(idMap);
+	deleteid(idMapBreached);
 }
 
 // Add a new global hit box 
@@ -61,4 +66,11 @@ bool Map::checkAceHitBox(RectangleObject object)
 			if(globalHitBox[i].checkCollision(object))
 				return true;
 	return false;
+}
+
+void Map::changeToBreached()
+{
+	// change the background to breached;
+	dbHideSprite(idMap);
+	dbSprite ( idMapBreached, xMap, yMap, idMapBreached );
 }

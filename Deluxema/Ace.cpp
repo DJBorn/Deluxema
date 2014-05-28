@@ -34,9 +34,15 @@ hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85)
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 200, 200)); // delay is 2
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 0, 1, 1, 200, 200));
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 200, 200));
+
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sleeping.bmp", -12, 5, 0, 2, 1, 0, 2, 50, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Waking_Up.bmp", -12, 5, 0, 4, 1, 0, 4, 6, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sitting.bmp", -12, 5, 0, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Up.bmp", -50, -16, 0, 4, 1, 0, 4, 4, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Sword.bmp", -50, -16, 0, 4, 3, 0, 12, 3, 200, 200));
+
 	animations.push_back(new Animation("includes//Sprites//Ace//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
-	changeDirection();
 }
 
 Ace::~Ace()
@@ -74,7 +80,7 @@ void Ace::playAnimation()
 			attack.x = x + 14 + addFlip;
 			attack.y = y - 10;
 
-			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
+			//animations[12]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
 			attacking = false;
@@ -104,7 +110,7 @@ void Ace::playAnimation()
 			attack.x = x - 8 + addFlip;
 			attack.y = y - 12;
 
-			//animations[7]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
+			//animations[12]->playAnimation(attack.x, attack.y, &frame, true, &ended); // TEMPORARY GET RID	
 		}
 		else
 			attacking = false;
@@ -119,7 +125,36 @@ void Ace::playAnimation()
 		animations[4]->playAnimation(x, y, &frame, true, &ended);
 	if(eStance == eHurt)
 		animations[5]->playAnimation(x, y, &frame, true, &ended);
-	//animations[6]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID
+	if(eStance == eSleeping)
+		animations[6]->playAnimation(x, y, &frame, true, &ended);
+	if(eStance == eWakingUp)
+	{
+		animations[7]->playAnimation(x, y, &frame, false, &ended);
+		if(ended)
+			setAnimation(eSitting);
+	}
+	if(eStance == eSitting)
+		animations[8]->playAnimation(x, y, &frame, true, &ended);
+	if(eStance == eGettingUp)
+	{
+		animations[9]->playAnimation(x, y, &frame, false, &ended);
+		if(ended)
+		{
+			setAnimation(eGettingSword);
+			ended = false;
+		}
+	}
+	if(eStance == eGettingSword)
+	{
+		animations[10]->playAnimation(x, y, &frame, false, &ended);
+		if(ended)
+		{
+			changeDirection();
+			setAnimation(eStand);
+			animations[0]->playAnimation(x, y, &frame, true, &ended);
+		}
+	}
+	//animations[11]->playAnimation(x, y, &frame, true, &ended); // TEMPORARY GET RID
 }
 
 void Ace::setAnimation(Ace::eAnimation animation)
@@ -137,8 +172,18 @@ void Ace::setAnimation(Ace::eAnimation animation)
 		animations[4]->stopAnimation();
 	if(eStance != eHurt)
 		animations[5]->stopAnimation();
+	if(eStance != eSleeping)
+		animations[6]->stopAnimation();
+	if(eStance != eWakingUp)
+		animations[7]->stopAnimation();
+	if(eStance != eSitting)
+		animations[8]->stopAnimation();
+	if(eStance != eGettingUp)
+		animations[9]->stopAnimation();
+	if(eStance != eGettingSword)
+		animations[10]->stopAnimation();
 	//if(!groundSlicing)
-		//animations[7]->stopAnimation(); // TEMPORARY CALIBRATION ANIMATION
+		//animations[12]->stopAnimation(); // TEMPORARY CALIBRATION ANIMATION
 
 }
 
@@ -172,6 +217,16 @@ void Ace::move(int x, int y, Map *map)
 		flying = false;
 	}
 }
+
+
+bool Ace::checkStance(eAnimation stance)
+{
+	if(eStance == stance)
+		return true;
+	return false;
+}
+
+
 
 void Ace::checkHurt(vector<RectangleObject> attacks, vector<bool> attackerFacingRight, vector<bool> attacking)
 {
@@ -298,3 +353,4 @@ void Ace::controlAce(Map *map,  bool jumpButton, bool sliceButton, bool leftButt
 	// move ace on the map
 	move(aceHorizontalMove, fall, map);
 }
+

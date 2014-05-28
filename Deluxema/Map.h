@@ -22,9 +22,12 @@ class Map {
 
 	bool checkGlobalHitBox(RectangleObject object);
 	bool checkAceHitBox(RectangleObject object);
+
+	void changeToBreached();
 	
     private:
 		int idMap;
+		int idMapBreached;
 		int xMap;
 		int yMap;
 		vector<RectangleObject> globalHitBox;
