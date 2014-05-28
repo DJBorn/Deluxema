@@ -2,4 +2,6 @@
 
 void MusicSetup();
 void playMainTheme();
+void playStartTheme();
+void stopStartTheme();
 void deleteMusic();

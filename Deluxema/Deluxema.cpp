@@ -12,6 +12,7 @@
 #include "Explosion.h"
 #include "Number.h"
 #include "idAssigner.h"
+#include <math.h>
 
 using namespace std;
 
@@ -22,6 +23,12 @@ double gravity = 1;
 int numRobots = 5;
 int score = 0;
 int scoreId;
+int titleId;
+int startId;
+int startDelay = 0;
+int startFrame = 1;
+int controlsId;
+
 bool enteringGame = false;
 int explosionTimer = 0;
 
@@ -82,12 +89,28 @@ void setup()
 	scoreId = generateid();
 	dbCreateAnimatedSprite(scoreId, "includes//Sprites//Effects//Score.bmp", 1, 1, scoreId);
 	dbSprite(scoreId, 200, 0, scoreId);
+	dbHideSprite(scoreId);
 	dbSetSpritePriority(scoreId, 202);
+
+	titleId = generateid();
+	dbCreateAnimatedSprite(titleId, "includes//Sprites//Effects//Deluxema.bmp", 1, 1, titleId);
+	dbSprite(titleId, 500 - dbSpriteWidth(titleId)/2, 68, titleId);
+	dbSetSpritePriority(titleId, 202);
+
+	startId = generateid();
+	dbCreateAnimatedSprite(startId, "includes//Sprites//Effects//Start.bmp", 1, 2, startId);
+	dbSprite(startId, 500 - dbSpriteWidth(startId)/2, 250, startId);;
+	dbSetSpritePriority(startId, 202);
+
+	controlsId = generateid();
+	dbCreateAnimatedSprite(controlsId, "includes//Sprites//Effects//Controls.bmp", 1, 1, controlsId);
+	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 378, controlsId);;
+	dbSetSpritePriority(controlsId, 202);
 
 	// Setup all sounds
 	MusicSetup();
 
-	playMainTheme();
+	playStartTheme();
 }
 
 // Map setup creates all the hit boxes where the player and robots shouldn't go
@@ -101,10 +124,25 @@ void mapSetup(Map *map)
 
 void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftExplosion)
 {
+	// Hide game texts if the game is restarting
+	dbHideSprite(scoreId);
+
 	if(!enteringGame)
+	{
+		startDelay++;
+		if(startDelay == 30)
+		{
+			startDelay = 0;
+			dbSetSpriteFrame(startId, (++startFrame % 2) + 1);
+		}
 		ace->setAnimation(Ace::eSleeping);
+	}
 	if(checkEnter() && !enteringGame)
 	{
+		dbHideSprite(titleId);
+		dbHideSprite(startId);
+		dbHideSprite(controlsId);
+		stopStartTheme();
 		enteringGame = true;
 		ace->setAnimation(Ace::eWakingUp);
 	}
@@ -154,10 +192,14 @@ void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftE
 		}
 		else if(ace->checkStance(Ace::eGettingSword))
 		{
+			playMainTheme();
 			ace->setAnimation(Ace::eGettingSword);
 		}
 		else
+		{
+			dbShowSprite(scoreId);
 			eGameMode = eGame;
+		}
 
 	}
 	ace->playAnimation();
@@ -171,6 +213,7 @@ void applyGravity(Ace *ace, vector<Robot*>* robots)
 		robots->at(i)->Gravity(gravity/8);
 	}
 }
+
 void controller(Ace *ace, vector<Robot*>* robots, Map *map)
 {
 	vector<RectangleObject> robotAttacks;
@@ -225,7 +268,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *rightExplos
 			controller(ace, robots, map);
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
-			displayNumber(score, 300, 0);
+			displayNumber(score, 286, 0);
 			break;
 		}
 	}
