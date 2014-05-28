@@ -31,8 +31,8 @@ void Robot::initialize()
 
 // Position and create his attacks when Robot is created
 Robot::Robot() : Character(48, 32),
-dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 85),
-deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 85),
+dashSound("includes//Sounds//Effects//Robot//Robot_Dash.wav", 90),
+deathSound("includes//Sounds//Effects//Robot//Robot_Death.wav", 90),
 explosion()
 {
 	respawnTimer = 0;

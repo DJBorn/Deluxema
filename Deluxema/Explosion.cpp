@@ -12,7 +12,7 @@ Explosion::Explosion()
 	maxDelay = 4;
 	delay = maxDelay - 1;
 	followFrame = 3;
-	int volume = 85;
+	int volume = 87;
 
 	startSprite = new sprite;
 	startSprite->curFrame = 0;

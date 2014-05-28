@@ -11,10 +11,10 @@ using namespace std;
 
 // Position and create his attacks when Ace is created
 Ace::Ace(int x, int y) : Character(124, 76), 
-jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 85),
-attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 85),
-hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 85),
-portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 85)
+jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 90),
+attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 90),
+hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 90),
+portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 90)
 {
 	speed = 5; //speed is 5
 
@@ -285,7 +285,7 @@ void Ace::controlAce(Map *map,  bool jumpButton, bool sliceButton, bool leftButt
 		if(jumpButton && !flying && eStance != eSlice)
 		{
 			jumpSound.playSound();
-			setFall(-18);
+			setFall(-16);
 		}
 		
 		// _____ANIMATIONS SET HERE_____
