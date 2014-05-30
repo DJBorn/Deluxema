@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Missile.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Music.cpp"
 				>
 			</File>
@@ -237,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Missile.h"
 				>
 			</File>
 			<File

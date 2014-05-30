@@ -94,7 +94,11 @@ void Explosion::playExplosion(int X1, int X2, int Y1, int Y2)
 						workingSprite->locationY = dbRnd(Y2 - Y1) + (Y1 - 22);
 					}
 					if(workingSprite->curFrame == followFrame)
+					{
 						workingSprite->child->activated = true;
+						if(i == 9)
+							i--;
+					}
 					if(workingSprite->curFrame > 8)
 					{
 						workingSprite->curFrame = 0;

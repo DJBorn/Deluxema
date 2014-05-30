@@ -106,7 +106,7 @@ void setup()
 
 	controlsId = generateid();
 	dbCreateAnimatedSprite(controlsId, "includes//Sprites//Effects//Controls.bmp", 1, 1, controlsId);
-	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 378, controlsId);;
+	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 374, controlsId);;
 	dbSetSpritePriority(controlsId, 202);
 
 	startSoundId = generateid();
@@ -325,6 +325,10 @@ void DarkGDK ( void )
 
 	// Delete objects
 	
+	dbDeleteSprite(titleId);
+	dbDeleteSprite(startId);
+	dbDeleteSprite(controlsId);
+	dbDeleteSound(startSoundId);
 	delete leftExplosion;
 	delete rightExplosion;
 	deleteNumbers();
