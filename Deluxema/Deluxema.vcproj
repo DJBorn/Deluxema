@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Mirror.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Missile.cpp"
 				>
 			</File>
@@ -245,6 +249,10 @@
 			</File>
 			<File
 				RelativePath=".\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Mirror.h"
 				>
 			</File>
 			<File

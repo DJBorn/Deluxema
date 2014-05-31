@@ -163,21 +163,32 @@ void titleScreen(Ace *ace, Map *map)
 		}
 		ace->setAnimation(Ace::eSleeping);
 
+		// play each sparkle
 		sparkle1->playSparkle();
 		sparkle2->playSparkle();
 		sparkle3->playSparkle();
 	}
 	if(checkEnter() && !enteringGame)
 	{
+		// reset the sparkles
 		sparkle1->resetSparkle();
 		sparkle2->resetSparkle();
 		sparkle3->resetSparkle();
+
+		// play the start button sound effect
 		dbPlaySound(startSoundId);
+
+		// hide the texts
 		dbHideSprite(titleId);
 		dbHideSprite(startId);
 		dbHideSprite(controlsId);
+
+		// stop the title theme
 		stopStartTheme();
+
 		enteringGame = true;
+
+		// set Ace's animation to waking up
 		ace->setAnimation(Ace::eWakingUp);
 	}
 	

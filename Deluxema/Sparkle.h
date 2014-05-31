@@ -22,4 +22,4 @@ private:
 	bool glow;
 };
 
-#endif _SPARKLE_H_
+#endif // _SPARKLE_H_
