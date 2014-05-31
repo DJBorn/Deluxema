@@ -10,6 +10,7 @@ public:
 	~Sparkle();
 
 	void playSparkle();
+	void resetSparkle();
 private:
 	int id;
 	int frequency;

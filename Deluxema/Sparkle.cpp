@@ -61,3 +61,12 @@ void Sparkle::playSparkle()
 		}
 	}
 }
+
+void Sparkle::resetSparkle()
+{
+	frequency = 0;
+	delay = 0;
+	frame = -1;
+	glow = true;
+	dbHideSprite(id);
+}

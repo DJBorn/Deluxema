@@ -87,6 +87,9 @@ void deleteMenuEffects()
 	dbDeleteSprite(startId);
 	dbDeleteSprite(controlsId);
 	dbDeleteSound(startSoundId);
+	delete sparkle1;
+	delete sparkle2;
+	delete sparkle3;
 }
 
 // Initial setup for the game
@@ -166,9 +169,9 @@ void titleScreen(Ace *ace, Map *map)
 	}
 	if(checkEnter() && !enteringGame)
 	{
-		delete sparkle1;
-		delete sparkle2;
-		delete sparkle3;
+		sparkle1->resetSparkle();
+		sparkle2->resetSparkle();
+		sparkle3->resetSparkle();
 		dbPlaySound(startSoundId);
 		dbHideSprite(titleId);
 		dbHideSprite(startId);
