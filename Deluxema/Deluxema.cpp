@@ -13,6 +13,7 @@
 #include "Number.h"
 #include "Sound.h"
 #include "idAssigner.h"
+#include "Sparkle.h"
 #include <math.h>
 
 using namespace std;
@@ -30,6 +31,8 @@ int startSoundId;
 int startDelay = 0;
 int startFrame = 1;
 int controlsId;
+Explosion *leftExplosion, *rightExplosion;
+Sparkle *sparkle1, *sparkle2, *sparkle3;
 
 bool enteringGame = false;
 int explosionTimer = 0;
@@ -51,6 +54,40 @@ void GetDesktopResolution(int& horizontal, int& vertical)
    vertical = desktop.bottom;
 }
 
+void createMenuEffects()
+{
+	scoreId = generateid();
+	dbCreateAnimatedSprite(scoreId, "includes//Sprites//Effects//Score.bmp", 1, 1, scoreId);
+	dbSprite(scoreId, 200, 0, scoreId);
+	dbHideSprite(scoreId);
+	dbSetSpritePriority(scoreId, 202);
+
+	titleId = generateid();
+	dbCreateAnimatedSprite(titleId, "includes//Sprites//Effects//Deluxema.bmp", 1, 1, titleId);
+	dbSprite(titleId, 500 - dbSpriteWidth(titleId)/2, 68, titleId);
+	dbSetSpritePriority(titleId, 202);
+
+	startId = generateid();
+	dbCreateAnimatedSprite(startId, "includes//Sprites//Effects//Start.bmp", 1, 2, startId);
+	dbSprite(startId, 500 - dbSpriteWidth(startId)/2, 250, startId);
+	dbSetSpritePriority(startId, 202);
+
+	controlsId = generateid();
+	dbCreateAnimatedSprite(controlsId, "includes//Sprites//Effects//Controls.bmp", 1, 1, controlsId);
+	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 374, controlsId);
+	dbSetSpritePriority(controlsId, 202);
+
+	startSoundId = generateid();
+	dbLoadSound("includes//Sounds//Effects//Start_Select.wav", startSoundId);
+	dbSetSoundVolume(startSoundId, 90);
+}
+void deleteMenuEffects()
+{
+	dbDeleteSprite(titleId);
+	dbDeleteSprite(startId);
+	dbDeleteSprite(controlsId);
+	dbDeleteSound(startSoundId);
+}
 
 // Initial setup for the game
 void setup()
@@ -88,36 +125,15 @@ void setup()
 	// Transparent color
 	dbSetImageColorKey ( 255, 0, 255 );
 
-	scoreId = generateid();
-	dbCreateAnimatedSprite(scoreId, "includes//Sprites//Effects//Score.bmp", 1, 1, scoreId);
-	dbSprite(scoreId, 200, 0, scoreId);
-	dbHideSprite(scoreId);
-	dbSetSpritePriority(scoreId, 202);
-
-	titleId = generateid();
-	dbCreateAnimatedSprite(titleId, "includes//Sprites//Effects//Deluxema.bmp", 1, 1, titleId);
-	dbSprite(titleId, 500 - dbSpriteWidth(titleId)/2, 68, titleId);
-	dbSetSpritePriority(titleId, 202);
-
-	startId = generateid();
-	dbCreateAnimatedSprite(startId, "includes//Sprites//Effects//Start.bmp", 1, 2, startId);
-	dbSprite(startId, 500 - dbSpriteWidth(startId)/2, 250, startId);;
-	dbSetSpritePriority(startId, 202);
-
-	controlsId = generateid();
-	dbCreateAnimatedSprite(controlsId, "includes//Sprites//Effects//Controls.bmp", 1, 1, controlsId);
-	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 374, controlsId);;
-	dbSetSpritePriority(controlsId, 202);
-
-	startSoundId = generateid();
-	dbLoadSound("includes//Sounds//Effects//Start_Select.wav", startSoundId);
-	dbSetSoundVolume(startSoundId, 90);
+	createMenuEffects();
 
 	// Setup all sounds
 	MusicSetup();
 
 	playStartTheme();
 }
+
+
 
 // Map setup creates all the hit boxes where the player and robots shouldn't go
 void mapSetup(Map *map)
@@ -128,13 +144,14 @@ void mapSetup(Map *map)
 	eGameMode = eTitleScreen;
 }
 
-void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftExplosion)
+void titleScreen(Ace *ace, Map *map)
 {
 	// Hide game texts if the game is restarting
 	dbHideSprite(scoreId);
 
 	if(!enteringGame)
 	{
+		// make the start button blink
 		startDelay++;
 		if(startDelay == 30)
 		{
@@ -142,9 +159,16 @@ void titleScreen(Ace *ace, Map *map, Explosion *rightExplosion, Explosion *leftE
 			dbSetSpriteFrame(startId, (++startFrame % 2) + 1);
 		}
 		ace->setAnimation(Ace::eSleeping);
+
+		sparkle1->playSparkle();
+		sparkle2->playSparkle();
+		sparkle3->playSparkle();
 	}
 	if(checkEnter() && !enteringGame)
 	{
+		delete sparkle1;
+		delete sparkle2;
+		delete sparkle3;
 		dbPlaySound(startSoundId);
 		dbHideSprite(titleId);
 		dbHideSprite(startId);
@@ -254,7 +278,7 @@ void continuousAnimations(vector<Robot*>* robots)
 }
 
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *rightExplosion, Explosion *leftExplosion)
+void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -266,7 +290,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Explosion *rightExplos
 		}
 	case eTitleScreen:
 		{
-			titleScreen(ace, map, rightExplosion, leftExplosion);
+			titleScreen(ace, map);
 			break;
 		}
 	case eGame:
@@ -292,10 +316,12 @@ void DarkGDK ( void )
 	Map *map = new Map();
 	Ace *ace = new Ace(484, 311);
 	vector<Robot*>* robots = new vector<Robot*>;
-	Explosion *leftExplosion, *rightExplosion;
 	leftExplosion = new Explosion();
 	rightExplosion = new Explosion();
 	createNumbers(4);
+	sparkle1 = new Sparkle(230, 30, 100);
+	sparkle2 = new Sparkle(400, 70, 200);
+	sparkle3 = new Sparkle(600, 40, 150);
 
 	for(int i = 0; i < numRobots; i++)
 	{
@@ -312,7 +338,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace, robots, rightExplosion, leftExplosion);
+				Deluxema(map, ace, robots);
 			}
 
 		// exit if escape key is pressed
@@ -324,11 +350,7 @@ void DarkGDK ( void )
 	}
 
 	// Delete objects
-	
-	dbDeleteSprite(titleId);
-	dbDeleteSprite(startId);
-	dbDeleteSprite(controlsId);
-	dbDeleteSound(startSoundId);
+	deleteMenuEffects();
 	delete leftExplosion;
 	delete rightExplosion;
 	deleteNumbers();
