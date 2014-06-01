@@ -275,7 +275,7 @@ void Robot::AI(RectangleObject *target, Map *map)
 			}
 		}
 
-		// if the robots speed is 0, he has finished his dash and is not standing
+		// if the robots speed is 0, he has finished his dash and is standing
 		if(speed == 0)
 		{
 			// make sure he is not attacking

@@ -9,10 +9,24 @@ Mirror::Mirror(int x, int y)
 	Mirror::x = x;
 	Mirror::y = y;
 	eState = eMirror1;
+
+	// vertical movement initializations
 	verticalDelay = 0;
 	maxVerticalDelay = 10;
 	vUnitsShifted = 0;
 	shiftingUp = true;
+
+	// horizontal movement initializations
+	horizontalMoveDelay = 0;
+	maxHorizontalMoveDelay = 300;
+	curSpeed = 0;
+	maxSpeed = 3;
+	maxSpeedTimer = 0;
+	maxSpeedDuration = 50;
+	horizontalDelay = 0;
+	maxHorizontalDelay = 1;
+	hDashes = 0;
+	dashingRight = true;
 
 	width = 68;
 	height = 88;
@@ -103,4 +117,76 @@ void Mirror::moveVertical()
 
 	}
 	y += verticalMove;
+}
+void Mirror::moveHorizontal()
+{
+	int horizontalMove = 0;
+	horizontalMoveDelay++;
+
+	// the delay to determine how often to dash it
+	if(horizontalMoveDelay > maxHorizontalMoveDelay)
+	{
+		horizontalDelay++;
+		// the delay to determine how often to move it
+		if(horizontalDelay > maxHorizontalDelay)
+		{
+			horizontalDelay = 0;
+			if(dashingRight)
+			{
+				// if the mirror is accelerating, increase its speed
+				if(speedingUp)
+					curSpeed++;
+
+				// if the mirror has reached its max speed duration, decrease its speed
+				else if(maxSpeedTimer == maxSpeedDuration)
+					curSpeed--;
+
+				// if the mirror reached its max speed, stop it from speeding up and start the max speed timer
+				if(abs(curSpeed) == maxSpeed)
+				{
+					speedingUp = false;
+					maxSpeedTimer++;
+				}
+
+				// if the mirrors speed is 0, then the dash has completed, reset all variables
+				if(curSpeed == 0)
+				{
+					maxSpeedTimer = 0;
+					speedingUp = true;
+					horizontalMoveDelay = 0;
+
+					// update the mirrors location
+					hDashes++;
+					if(hDashes == 1)
+						dashingRight = false;
+				}
+			}
+			// reversed for moving left
+			else
+			{
+				if(speedingUp)
+					curSpeed--;
+				else if(maxSpeedTimer == maxSpeedDuration)
+					curSpeed++;
+
+				if(abs(curSpeed) == maxSpeed)
+				{
+					speedingUp = false;
+					maxSpeedTimer++;
+				}
+				if(curSpeed == 0)
+				{
+					maxSpeedTimer = 0;
+					speedingUp = true;
+					horizontalMoveDelay = 0;
+					hDashes--;
+					if(hDashes == -1)
+						dashingRight = true;
+				}
+			}
+			horizontalMove = curSpeed;
+		}
+
+	}
+	x += horizontalMove;
 }

@@ -154,6 +154,7 @@ void titleScreen(Ace *ace, Map *map, Mirror *mirror)
 	dbHideSprite(scoreId);
 	mirror->playAnimation();
 	mirror->moveVertical();
+	mirror->playAnimation();
 
 	if(!enteringGame)
 	{
@@ -286,6 +287,13 @@ void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
 	}
 }
 
+void mirrorAI(Mirror *mirror)
+{
+	mirror->moveVertical();
+	mirror->moveHorizontal();
+	mirror->playAnimation();
+}
+
 void continuousAnimations(vector<Robot*>* robots)
 {
 	for(int i = 0; i < robots->size(); i++)
@@ -316,8 +324,8 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			controller(ace, robots, map);
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
+			mirrorAI(mirror);
 			displayNumber(score, 286, 0);
-			mirror->playAnimation(); //temp
 			break;
 		}
 	}
