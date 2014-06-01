@@ -11,20 +11,11 @@ Deluxema.cpp
 The main file where all the events live
 
 
-
-=====================================
-HitBox.cpp
-=====================================
-The file where the hitBox struct is found (heavily used)
-
-
-
 =====================================
 idAssigner.cpp
 =====================================
 This is where the idAssigner lives, gives an unused id to any files used (music, sprites)
 This is also where the ids must be deleted when the files are deleted.
-
 
 
 =====================================

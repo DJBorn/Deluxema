@@ -14,6 +14,7 @@
 #include "Sound.h"
 #include "idAssigner.h"
 #include "Sparkle.h"
+#include "Mirror.h"
 #include <math.h>
 
 using namespace std;
@@ -147,10 +148,12 @@ void mapSetup(Map *map)
 	eGameMode = eTitleScreen;
 }
 
-void titleScreen(Ace *ace, Map *map)
+void titleScreen(Ace *ace, Map *map, Mirror *mirror)
 {
 	// Hide game texts if the game is restarting
 	dbHideSprite(scoreId);
+	mirror->playAnimation();
+	mirror->moveVertical();
 
 	if(!enteringGame)
 	{
@@ -292,7 +295,7 @@ void continuousAnimations(vector<Robot*>* robots)
 }
 
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
+void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 {
 	// switch for game mode
 	switch ( eGameMode )
@@ -304,7 +307,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 		}
 	case eTitleScreen:
 		{
-			titleScreen(ace, map);
+			titleScreen(ace, map, mirror);
 			break;
 		}
 	case eGame:
@@ -314,6 +317,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots)
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
 			displayNumber(score, 286, 0);
+			mirror->playAnimation(); //temp
 			break;
 		}
 	}
@@ -329,6 +333,7 @@ void DarkGDK ( void )
 	// Create objects
 	Map *map = new Map();
 	Ace *ace = new Ace(484, 311);
+	Mirror *mirror = new Mirror(500 - 34, 146);
 	vector<Robot*>* robots = new vector<Robot*>;
 	leftExplosion = new Explosion();
 	rightExplosion = new Explosion();
@@ -352,7 +357,7 @@ void DarkGDK ( void )
 			if(time > timespeed)
 			{
 				time = 0;
-				Deluxema(map, ace, robots);
+				Deluxema(map, ace, robots, mirror);
 			}
 
 		// exit if escape key is pressed
@@ -373,6 +378,7 @@ void DarkGDK ( void )
 		delete robots->at(i);
 	}
 	delete robots;
+	delete mirror;
 	delete map;
 	delete ace;
 	deleteMusic();
