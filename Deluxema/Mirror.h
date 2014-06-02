@@ -10,7 +10,7 @@ class Mirror : public RectangleObject
 {
 public:
 	Mirror(int x, int y);
-	~Mirror();	
+	~Mirror();
 	
 	// enum for which animation the Mirror is in
 	enum eAnimation {eMirror1, eMirror2, eMirror3, eMirror4, eMirror5, eMirrorBreak};
