@@ -27,6 +27,9 @@ public:
 	// set which way the Missile is facing (True -> Right, False -> Left)
 	void changeDirection();
 
+	void checkTargetCollision(RectangleObject target, bool *hit);
+
+	void checkHitCollision(RectangleObject object, bool attacking);
 	// move the missile
 	void firing();
 	

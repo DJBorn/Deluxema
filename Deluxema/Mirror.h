@@ -21,6 +21,9 @@ public:
 	// Set which animation to play
 	void setAnimation(eAnimation animation);
 
+	// the Mirror was hit
+	void hit();
+
 	// Move the Mirror vertically
 	void moveVertical();
 	void moveHorizontal();

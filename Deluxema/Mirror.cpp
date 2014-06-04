@@ -34,11 +34,11 @@ Mirror::Mirror(int x, int y)
 	// add all of the Mirror's animations
 								//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror1.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror2.bmp", -20, -12, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror3.bmp", -20, -12, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror4.bmp", -20, -12, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror5.bmp", -20, -12, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Break.bmp", -20, -12, 0, 4, 3, 0, 12, 20, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror2.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror3.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror4.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror5.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Break.bmp", -36, -36, 0, 4, 3, 0, 12, 20, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Hitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 }
 
@@ -83,6 +83,20 @@ void Mirror::setAnimation(Mirror::eAnimation animation)
 	if(eState != eMirrorBreak)
 		animations[5]->stopAnimation();
 
+}
+
+void Mirror::hit()
+{
+	if(eState == eMirror1)
+		setAnimation(eMirror2);
+	else if(eState == eMirror2)
+		setAnimation(eMirror3);
+	else if(eState == eMirror3)
+		setAnimation(eMirror4);
+	else if(eState == eMirror4)
+		setAnimation(eMirror5);
+	else
+		setAnimation(eMirrorBreak);
 }
 
 void Mirror::moveVertical()
