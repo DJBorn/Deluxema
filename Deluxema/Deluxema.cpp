@@ -15,6 +15,7 @@
 #include "idAssigner.h"
 #include "Sparkle.h"
 #include "Mirror.h"
+#include "Missile.h"
 #include <math.h>
 
 using namespace std;
@@ -24,6 +25,7 @@ eMode eGameMode = eMapSetup;
 
 double gravity = 1;
 int numRobots = 5;
+int numMissiles = 3;
 int score = 0;
 int scoreId;
 int titleId;
@@ -34,6 +36,8 @@ int startFrame = 1;
 int controlsId;
 Explosion *leftExplosion, *rightExplosion;
 Sparkle *sparkle1, *sparkle2, *sparkle3;
+vector<Missile*>* missiles;
+
 
 bool enteringGame = false;
 int explosionTimer = 0;
@@ -294,6 +298,14 @@ void mirrorAI(Mirror *mirror)
 	mirror->playAnimation();
 }
 
+void missileAI()
+{
+	for(int i = 0; i < missiles->size(); i++)
+	{
+		missiles->at(i)->firing();
+	}
+}
+
 void continuousAnimations(vector<Robot*>* robots)
 {
 	for(int i = 0; i < robots->size(); i++)
@@ -325,6 +337,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
 			mirrorAI(mirror);
+			missileAI();
 			displayNumber(score, 286, 0);
 			break;
 		}
@@ -343,6 +356,17 @@ void DarkGDK ( void )
 	Ace *ace = new Ace(484, 311);
 	Mirror *mirror = new Mirror(500 - 34, 146);
 	vector<Robot*>* robots = new vector<Robot*>;
+	for(int i = 0; i < numRobots; i++)
+	{
+		robots->push_back(new Robot());
+	}
+	
+	missiles = new vector<Missile*>;
+	for(int i = 0; i < numMissiles; i++)
+	{
+		missiles->push_back(new Missile());
+	}
+
 	leftExplosion = new Explosion();
 	rightExplosion = new Explosion();
 	createNumbers(4);
@@ -350,11 +374,6 @@ void DarkGDK ( void )
 	sparkle2 = new Sparkle(400, 70, 200);
 	sparkle3 = new Sparkle(600, 40, 150);
 
-	for(int i = 0; i < numRobots; i++)
-	{
-		robots->push_back(new Robot());
-	}
-	
 
 	int time = 0;
 	int timespeed = 0;
@@ -384,6 +403,10 @@ void DarkGDK ( void )
 	for(int i = 0; i < robots->size(); i++)
 	{
 		delete robots->at(i);
+	}
+	for(int i = 0; i < missiles->size(); i++)
+	{
+		delete missiles->at(i);
 	}
 	delete robots;
 	delete mirror;

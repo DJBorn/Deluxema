@@ -3,6 +3,7 @@
 
 #include "RectangleObject.h"
 #include "Animation.h"
+#include "Explosion.h"
 #include <vector>
 
 
@@ -22,9 +23,19 @@ public:
 
 	// Set which animation to play
 	void setAnimation(eAnimation animation);
+
+	// set which way the Missile is facing (True -> Right, False -> Left)
+	void changeDirection();
+
+	// move the missile
+	void firing();
 	
 
 private:
+	int speed;
+	int maxSpeed;
+	bool facingRight;
+	Explosion explosion;
 	eAnimation eState;
 	vector<Animation*> animations;
 };
