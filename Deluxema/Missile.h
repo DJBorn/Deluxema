@@ -4,6 +4,7 @@
 #include "RectangleObject.h"
 #include "Animation.h"
 #include "Explosion.h"
+#include "Map.h"
 #include <vector>
 
 
@@ -29,13 +30,22 @@ public:
 
 	void checkTargetCollision(RectangleObject target, bool *hit);
 
-	void checkHitCollision(RectangleObject object, bool attacking);
+	void respawn();
+
+	void checkHitCollision(RectangleObject object, bool attackerFacingRight, bool attacking, int &score);
+	
 	// move the missile
-	void firing();
+	void AI(Map *map);
+
+	// apply gravity on missile
+	void Gravity(double gravity);
+
+	void playExplosion();
 	
 
 private:
 	int speed;
+	double fall;
 	int maxSpeed;
 	bool facingRight;
 	Explosion explosion;

@@ -3,18 +3,20 @@
 #include "Explosion.h"
 #include "DarkGDK.h"
 #include "RectangleObject.h"
+#include "Map.h"
 
 void Missile::initialize()
 {
-	eState = eFlying;
+	explosion.turnOffExplosion();
+	setAnimation(eFlying);
 	if(!facingRight)
 		changeDirection();
-	x = -200;
+	x = dbRnd(100) - 300;
 	speed = maxSpeed;
 	if(dbRnd(1))
 	{
 		speed = maxSpeed * -1;
-		x = 1100;
+		x = dbRnd(100) + 1100;
 		changeDirection();
 	}
 	y = 163;
@@ -25,7 +27,7 @@ Missile::Missile()
 {
 	width = 106;
 	height = 34;
-	maxSpeed = 3;
+	maxSpeed = 2;
 
 	facingRight = false;
 
@@ -33,7 +35,7 @@ Missile::Missile()
 	// add all of the Missile's animations
 												//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
 	animations.push_back(new Animation("includes//Sprites//Missile//Missile.bmp", 0, 0, 0, 1, 5, 0, 5, 8, 202, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Missile//Missile_Destroyed.bmp", -20, -12, 0, 2, 1, 0, 2, 16, 202, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Missile//Missile_Destroyed.bmp", -20, -12, 0, 2, 1, 0, 2, 5, 202, 200)); // delay is 8
 
 	initialize();
 }
@@ -74,21 +76,54 @@ void Missile::changeDirection()
 
 void Missile::checkTargetCollision(RectangleObject target, bool *hit)
 {
-	if(checkCollision(target))
+	if(checkCollision(target) && eState != eDestroyed)
 	{
 		initialize();
 		*hit = true;
 	}
 }
 
-void Missile::checkHitCollision(RectangleObject object, bool attacking)
+void Missile::respawn()
 {
-	if(checkCollision(object) && attacking)
-		initialize();
+	initialize();
 }
 
-void Missile::firing()
+void Missile::checkHitCollision(RectangleObject object, bool attackerFacingRight, bool attacking, int &score)
+{
+	if(checkCollision(object) && attacking && eState != eDestroyed)
+	{
+		score++;
+		explosion.turnOnExplosion();
+		if(attackerFacingRight)
+			speed = 3;
+		else
+			speed = -3;
+		fall = -4;
+		setAnimation(eDestroyed);
+	}
+}
+
+void Missile::AI(Map *map)
 {
 	x += speed;
+	if(eState == eDestroyed)
+	{
+		y += fall;
+		if(map->checkGlobalHitBox((RectangleObject)*this))
+		{
+			initialize();
+		}
+	}
 	playAnimation();
+}
+
+void Missile::Gravity(double gravity)
+{
+	if(eState == eDestroyed)
+		fall += gravity;
+}
+
+void Missile::playExplosion()
+{
+	explosion.playExplosion(x, x + width, y, y + height);
 }

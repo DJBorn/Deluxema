@@ -24,8 +24,8 @@ enum  eMode { eMapSetup, eGame, eTitleScreen };
 eMode eGameMode = eMapSetup;
 
 double gravity = 1;
-int numRobots = 5;
-int numMissiles = 1;
+int numRobots = 6;
+int numMissiles = 2;
 int score = 0;
 int scoreId;
 int titleId;
@@ -265,6 +265,10 @@ void applyGravity(Ace *ace, vector<Robot*>* robots)
 	{
 		robots->at(i)->Gravity(gravity/8);
 	}
+	for(int i = 0; i < missiles->size(); i++)
+	{
+		missiles->at(i)->Gravity(gravity/4);
+	}
 }
 
 void controller(Ace *ace, vector<Robot*>* robots, Map *map)
@@ -298,16 +302,16 @@ void mirrorAI(Mirror *mirror)
 	mirror->playAnimation();
 }
 
-void missileAI(Ace *ace, Mirror *mirror)
+void missileAI(Ace *ace, Mirror *mirror, Map *map)
 {
 	for(int i = 0; i < missiles->size(); i++)
 	{
 		bool hit = false;
-		missiles->at(i)->firing();
+		missiles->at(i)->AI(map);
 		missiles->at(i)->checkTargetCollision((RectangleObject)*mirror, &hit);
 		if(hit)
 			mirror->hit();
-		missiles->at(i)->checkHitCollision(ace->getAttack(), ace->Attacking());
+		missiles->at(i)->checkHitCollision(ace->getAttack(), ace->getFacingRight(), ace->Attacking(), score);
 	}
 }
 
@@ -316,6 +320,10 @@ void continuousAnimations(vector<Robot*>* robots)
 	for(int i = 0; i < robots->size(); i++)
 	{
 		robots->at(i)->playExplosion();
+	}
+	for(int i = 0; i < missiles->size(); i++)
+	{
+		missiles->at(i)->playExplosion();
 	}
 }
 
@@ -341,7 +349,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			controller(ace, robots, map);
 			robotAI(robots, ace, map);
 			continuousAnimations(robots);
-			missileAI(ace, mirror);
+			missileAI(ace, mirror, map);
 			mirrorAI(mirror);
 			displayNumber(score, 286, 0);
 			break;
