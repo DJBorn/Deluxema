@@ -49,6 +49,7 @@ private:
 	int maxSpeed;
 	bool facingRight;
 	Explosion explosion;
+	Sound Explode;
 	eAnimation eState;
 	vector<Animation*> animations;
 };

@@ -23,7 +23,7 @@ void Missile::initialize()
 
 }
 
-Missile::Missile()
+Missile::Missile() : Explode("includes//Sounds//Effects//Missile_Explosion.wav", 90)
 {
 	width = 106;
 	height = 34;
@@ -80,6 +80,7 @@ void Missile::checkTargetCollision(RectangleObject target, bool *hit)
 	{
 		initialize();
 		*hit = true;
+		Explode.playSound();
 	}
 }
 
