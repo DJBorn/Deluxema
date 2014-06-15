@@ -28,6 +28,8 @@ Mirror::Mirror(int x, int y)
 	hDashes = 0;
 	dashingRight = true;
 
+	destroyed = false;
+
 	width = 68;
 	height = 88;
 
@@ -38,7 +40,7 @@ Mirror::Mirror(int x, int y)
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror3.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror4.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror5.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Break.bmp", -36, -36, 0, 4, 3, 0, 12, 20, 199, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Break.bmp", -36, -36, 0, 4, 3, 0, 12, 2, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Hitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 }
 
@@ -96,7 +98,10 @@ void Mirror::hit()
 	else if(eState == eMirror4)
 		setAnimation(eMirror5);
 	else
+	{
+		destroyed = true;
 		setAnimation(eMirrorBreak);
+	}
 }
 
 void Mirror::moveVertical()
@@ -203,4 +208,10 @@ void Mirror::moveHorizontal()
 
 	}
 	x += horizontalMove;
+}
+
+
+bool Mirror::Destroyed()
+{
+	return destroyed;
 }

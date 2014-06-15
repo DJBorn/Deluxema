@@ -23,6 +23,7 @@ using namespace std;
 enum  eMode { eMapSetup, eGame, eTitleScreen };
 eMode eGameMode = eMapSetup;
 
+int timespeed = 0;
 double gravity = 1;
 int numRobots = 6;
 int numMissiles = 2;
@@ -30,6 +31,9 @@ int score = 0;
 int scoreId;
 int titleId;
 int startId;
+int fadeId;
+int fadeAlpha = 0;
+bool fadeComplete = false;
 int startSoundId;
 int startDelay = 0;
 int startFrame = 1;
@@ -82,6 +86,12 @@ void createMenuEffects()
 	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 374, controlsId);
 	dbSetSpritePriority(controlsId, 202);
 
+	fadeId = generateid();
+	dbCreateAnimatedSprite(fadeId, "includes//Sprites//Effects//Fade.bmp", 1, 1, fadeId);
+	dbSprite(fadeId, 0, 0, fadeId);
+	dbSetSpritePriority(fadeId, 300);
+	dbSetSpriteAlpha(fadeId, 0);
+
 	startSoundId = generateid();
 	dbLoadSound("includes//Sounds//Effects//Start_Select.wav", startSoundId);
 	dbSetSoundVolume(startSoundId, 90);
@@ -95,6 +105,16 @@ void deleteMenuEffects()
 	delete sparkle1;
 	delete sparkle2;
 	delete sparkle3;
+}
+
+void fadeOut()
+{
+	fadeAlpha+= 15;
+	if(fadeAlpha > 255)
+		fadeComplete = true;
+	else
+		dbSetSpriteAlpha(fadeId, fadeAlpha);
+
 }
 
 // Initial setup for the game
@@ -352,6 +372,11 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			missileAI(ace, mirror, map);
 			mirrorAI(mirror);
 			displayNumber(score, 286, 0);
+			if(mirror->Destroyed())
+			{
+				timespeed = 15;
+				fadeOut();
+			}
 			break;
 		}
 	}
@@ -389,7 +414,6 @@ void DarkGDK ( void )
 
 
 	int time = 0;
-	int timespeed = 0;
 	// Main Dark GDK loop
 	while ( LoopGDK ( ) )
 	{

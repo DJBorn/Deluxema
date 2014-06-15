@@ -28,6 +28,9 @@ public:
 	void moveVertical();
 	void moveHorizontal();
 
+	// Destroyed accessor function
+	bool Destroyed();
+
 private:
 	int verticalDelay;			// the vertical delay counter
 	int maxVerticalDelay;		// How often to move the mirror vertically
@@ -46,6 +49,8 @@ private:
 	int maxHorizontalDelay;		// the horizontal delay counter which dictates how often the mirror should move one frame
 	int hDashes;				// the position the mirror is in 0 being middle, positive is right and negative is left
 	bool dashingRight;			// the state whether the mirror is moving left or right
+
+	bool destroyed;
 
 	vector<Animation*> animations;
 
