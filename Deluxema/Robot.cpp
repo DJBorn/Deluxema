@@ -304,3 +304,10 @@ void Robot::playExplosion()
 {
 	explosion.playExplosion(x, x + width, y, y + height);
 }
+
+void Robot::fadeSounds()
+{
+	dashSound.fade();
+	deathSound.fade();
+	explosion.fadeSound();
+}

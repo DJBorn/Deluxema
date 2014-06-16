@@ -153,3 +153,15 @@ void Explosion::playExplosion(int X1, int X2, int Y1, int Y2)
 		workingSprite = workingSprite->child;
 	}
 }
+
+void Explosion::fadeSound()
+{
+	sprite* workingSprite;
+	workingSprite = startSprite;
+	for(int i = 0; i < 10; i++)
+	{
+		sprite* nextSprite = workingSprite->child;
+		workingSprite->explosionSound->stopSound();
+		workingSprite = nextSprite;
+	}
+}

@@ -34,7 +34,13 @@ void playMainTheme()
 
 void fadeMainTheme()
 {
-	mainThemeVolume -= 4;
+	mainThemeVolume -= 3;
+	dbSetMusicVolume(mainThemeId, mainThemeVolume);
+}
+
+void resetMainThemeVolume()
+{
+	mainThemeVolume = 55;
 	dbSetMusicVolume(mainThemeId, mainThemeVolume);
 }
 

@@ -36,6 +36,8 @@ public:
 
 	// Control ace given the inputs
 	void controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButton, bool rightButton);
+
+	void fadeSounds();
 private:
 	eAnimation eStance;
 	int hurtSpeed;

@@ -357,3 +357,10 @@ void Ace::controlAce(Map *map,  bool jumpButton, bool sliceButton, bool leftButt
 	move(aceHorizontalMove, fall, map);
 }
 
+void Ace::fadeSounds()
+{
+	jumpSound.fade();
+	attackSound.fade();
+	hurtSound.fade();
+	portalSound.fade();
+}

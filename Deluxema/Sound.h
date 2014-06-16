@@ -9,9 +9,12 @@ public:
 
 	void playSound();
 	void stopSound();
+	void fade();
+	void resetVolume();
 private:
 	int id;
 	int volume;
+	int fadeVolume;
 };
 
 

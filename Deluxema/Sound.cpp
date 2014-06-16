@@ -5,6 +5,7 @@
 Sound::Sound(char* path, int volume)
 {
 	Sound::volume = volume;
+	fadeVolume = volume;
 	id = generateid();
 	dbLoadSound(path, id);
 	dbSetSoundVolume(id, volume);
@@ -26,3 +27,16 @@ void Sound::stopSound()
 	dbStopSound(id);
 }
 
+void Sound::fade()
+{
+	fadeVolume -= 8;
+	if(fadeVolume < 0)
+		fadeVolume = 0;
+	dbSetSoundVolume(id, fadeVolume);
+}
+
+void Sound::resetVolume()
+{
+	fadeVolume = volume;
+	dbSetSoundVolume(id, volume);
+}

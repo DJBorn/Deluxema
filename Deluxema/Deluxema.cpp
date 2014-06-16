@@ -34,6 +34,7 @@ int startId;
 int fadeId;
 int fadeAlpha = 0;
 bool fadeComplete = false;
+bool gameOver = false;
 int startSoundId;
 int startDelay = 0;
 int startFrame = 1;
@@ -112,10 +113,37 @@ void fadeOut()
 	fadeAlpha+= 15;
 	fadeMainTheme();
 	if(fadeAlpha > 255)
+	{
+		fadeAlpha = 255;
 		fadeComplete = true;
+		dbSetSpriteAlpha(fadeId, fadeAlpha);
+	}
 	else
 		dbSetSpriteAlpha(fadeId, fadeAlpha);
 
+}
+
+void gameOverCheck(Ace *ace, vector<Robot*>* robots, Mirror *mirror)
+{
+	if(mirror->Destroyed() && !gameOver)
+	{
+		gameOver = true;
+	}
+
+	if(gameOver)
+	{
+		ace->fadeSounds();
+		for(int i = 0; i < robots->size(); i++)
+		{
+			robots->at(i)->fadeSounds();
+		}
+		for(int i = 0; i < missiles->size(); i++)
+		{
+			missiles->at(i)->fadeSounds();
+		}
+		timespeed = 15;
+		fadeOut();
+	}
 }
 
 // Initial setup for the game
@@ -373,11 +401,7 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			missileAI(ace, mirror, map);
 			mirrorAI(mirror);
 			displayNumber(score, 286, 0);
-			if(mirror->Destroyed())
-			{
-				timespeed = 15;
-				fadeOut();
-			}
+			gameOverCheck(ace, robots, mirror);
 			break;
 		}
 	}

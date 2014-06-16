@@ -42,6 +42,7 @@ public:
 
 	void playExplosion();
 	
+	void fadeSounds();
 
 private:
 	int speed;

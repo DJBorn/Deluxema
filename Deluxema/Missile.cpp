@@ -128,3 +128,10 @@ void Missile::playExplosion()
 {
 	explosion.playExplosion(x, x + width, y, y + height);
 }
+
+
+void Missile::fadeSounds()
+{
+	Explode.fade();
+	explosion.fadeSound();
+}

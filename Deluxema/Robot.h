@@ -42,6 +42,8 @@ public:
 	void AI(RectangleObject *target, Map *map);
 
 	void playExplosion();
+
+	void fadeSounds();
 private:
 	int dashDelay;
 	int maxDashDelay;
