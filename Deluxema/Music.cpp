@@ -3,14 +3,16 @@
 
 int mainThemeId;
 int startThemeId;
+int mainThemeVolume;
 void MusicSetup()
 {
+	mainThemeVolume = 55;
 	mainThemeId = generateid();
 	startThemeId = generateid();
 	dbLoadMusic("includes//Sounds//Music//MC Hotdog - Wo Ai Tai Mei.mp3", startThemeId);
 	dbLoadMusic ( "includes//Sounds//Music//Memeshikute.mp3" , mainThemeId );
 
-	dbSetMusicVolume(mainThemeId, 55);
+	dbSetMusicVolume(mainThemeId, mainThemeVolume);
 	dbSetMusicVolume(startThemeId, 55);
 }
 
@@ -24,9 +26,16 @@ void stopStartTheme()
 	dbStopMusic(startThemeId);
 }
 
+
 void playMainTheme()
 {
 	dbLoopMusic(mainThemeId);
+}
+
+void fadeMainTheme()
+{
+	mainThemeVolume -= 4;
+	dbSetMusicVolume(mainThemeId, mainThemeVolume);
 }
 
 void deleteMusic()

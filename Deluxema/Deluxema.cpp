@@ -110,6 +110,7 @@ void deleteMenuEffects()
 void fadeOut()
 {
 	fadeAlpha+= 15;
+	fadeMainTheme();
 	if(fadeAlpha > 255)
 		fadeComplete = true;
 	else
