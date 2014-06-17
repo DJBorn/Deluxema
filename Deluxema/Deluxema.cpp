@@ -20,7 +20,7 @@
 
 using namespace std;
 
-enum  eMode { eMapSetup, eGame, eTitleScreen };
+enum  eMode { eMapSetup, eGame, eTitleScreen, eEnding };
 eMode eGameMode = eMapSetup;
 
 int timespeed = 0;
@@ -32,6 +32,7 @@ int scoreId;
 int titleId;
 int startId;
 int fadeId;
+int fadeTimer = 0;
 int fadeAlpha = 0;
 bool fadeComplete = false;
 bool gameOver = false;
@@ -117,6 +118,7 @@ void fadeOut()
 		fadeAlpha = 255;
 		fadeComplete = true;
 		dbSetSpriteAlpha(fadeId, fadeAlpha);
+		eGameMode = eEnding;
 	}
 	else
 		dbSetSpriteAlpha(fadeId, fadeAlpha);
@@ -143,6 +145,15 @@ void gameOverCheck(Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 		}
 		timespeed = 15;
 		fadeOut();
+	}
+}
+
+void fadePause()
+{
+	fadeTimer++;
+	if(fadeTimer == 100)
+	{
+
 	}
 }
 
@@ -402,6 +413,11 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			mirrorAI(mirror);
 			displayNumber(score, 286, 0);
 			gameOverCheck(ace, robots, mirror);
+			break;
+		}
+	case eEnding:
+		{
+			fadePause();
 			break;
 		}
 	}
