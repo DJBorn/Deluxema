@@ -14,7 +14,7 @@ public:
 private:
 	int id;
 	int volume;
-	int fadeVolume;
+	double fadeVolume;
 };
 
 

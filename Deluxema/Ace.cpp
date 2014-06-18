@@ -9,6 +9,20 @@
 #include "DarkGDK.h" // temp
 using namespace std;
 
+void Ace::initialize(int x, int y)
+{
+	speed = 5; //speed is 5
+	setAnimation(Ace::eSleeping);
+	flying = false;
+	attacking = false;
+	fall = 0;
+	Ace::x = x;
+	Ace::y = y;
+	if(!facingRight)
+		changeDirection();
+	resetSounds();
+}
+
 // Position and create his attacks when Ace is created
 Ace::Ace(int x, int y) : Character(124, 76), 
 jumpSound("includes//Sounds//Effects//Ace//Ace_Jump.wav", 90),
@@ -16,14 +30,9 @@ attackSound("includes//Sounds//Effects//Ace//Ace_Slice.wav", 90),
 hurtSound("includes//Sounds//Effects//Ace//Ace_Hit.wav", 90),
 portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 90)
 {
-	speed = 5; //speed is 5
-
-	Ace::x = x;
-	Ace::y = y;
-	eStance = eStand;
-
 	width = 28;
 	height = 74;
+
 
 
 
@@ -44,6 +53,8 @@ portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 90)
 
 	animations.push_back(new Animation("includes//Sprites//Ace//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID
+
+	initialize(x, y);
 }
 
 Ace::~Ace()
@@ -363,4 +374,12 @@ void Ace::fadeSounds()
 	attackSound.fade();
 	hurtSound.fade();
 	portalSound.fade();
+}
+
+void Ace::resetSounds()
+{
+	jumpSound.resetVolume();
+	attackSound.resetVolume();
+	hurtSound.resetVolume();
+	portalSound.resetVolume();
 }

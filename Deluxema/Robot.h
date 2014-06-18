@@ -43,7 +43,11 @@ public:
 
 	void playExplosion();
 
+	// sound control
 	void fadeSounds();
+	void resetSounds();
+
+	void resetExplosion();
 private:
 	int dashDelay;
 	int maxDashDelay;

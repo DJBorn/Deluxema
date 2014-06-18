@@ -9,6 +9,7 @@
 class Mirror : public RectangleObject
 {
 public:
+	void initialize(int x, int y);
 	Mirror(int x, int y);
 	~Mirror();
 	

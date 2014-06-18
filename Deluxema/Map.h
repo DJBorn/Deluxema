@@ -23,6 +23,7 @@ class Map {
 	bool checkGlobalHitBox(RectangleObject object);
 	bool checkAceHitBox(RectangleObject object);
 
+	void changeToNormal();
 	void changeToBreached();
 	
     private:

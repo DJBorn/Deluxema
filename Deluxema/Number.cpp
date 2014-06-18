@@ -6,6 +6,14 @@
 
 std::vector<int> id;
 
+void hideNumbers()
+{
+	for(int i = 0; i < id.size(); i++)
+	{
+		dbHideSprite(id.at(i));
+	}
+}
+
 void createNumbers(int n)
 {
 	for(int i = 0; i < n; i++)

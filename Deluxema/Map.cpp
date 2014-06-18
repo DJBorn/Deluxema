@@ -68,9 +68,18 @@ bool Map::checkAceHitBox(RectangleObject object)
 	return false;
 }
 
+void Map::changeToNormal()
+{
+	// change the background back to its original state
+	dbHideSprite(idMapBreached);
+	dbShowSprite(idMap);
+	dbSprite ( idMap, xMap, yMap, idMap );
+}
+
 void Map::changeToBreached()
 {
-	// change the background to breached;
+	// change the background to breached
 	dbHideSprite(idMap);
+	dbShowSprite(idMapBreached);
 	dbSprite ( idMapBreached, xMap, yMap, idMapBreached );
 }

@@ -3,7 +3,7 @@
 
 int mainThemeId;
 int startThemeId;
-int mainThemeVolume;
+double mainThemeVolume;
 void MusicSetup()
 {
 	mainThemeVolume = 55;
@@ -31,10 +31,14 @@ void playMainTheme()
 {
 	dbLoopMusic(mainThemeId);
 }
+void stopMainTheme()
+{
+	dbStopMusic(mainThemeId);
+}
 
 void fadeMainTheme()
 {
-	mainThemeVolume -= 3;
+	mainThemeVolume -= 0.3;
 	dbSetMusicVolume(mainThemeId, mainThemeVolume);
 }
 

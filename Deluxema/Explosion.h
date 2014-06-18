@@ -14,6 +14,7 @@ public:
 	void turnOnExplosion();
 	void playExplosion(int X1, int X2, int Y1, int Y2);
 	void turnOffExplosion();
+	void resetExplosion();
 	void fadeSound();
 
 private:

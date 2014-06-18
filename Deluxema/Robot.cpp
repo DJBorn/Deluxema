@@ -311,3 +311,14 @@ void Robot::fadeSounds()
 	deathSound.fade();
 	explosion.fadeSound();
 }
+
+void Robot::resetSounds()
+{
+	dashSound.resetVolume();
+	deathSound.resetVolume();
+}
+
+void Robot::resetExplosion()
+{
+	explosion.resetExplosion();
+}

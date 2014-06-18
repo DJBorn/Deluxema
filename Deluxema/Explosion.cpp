@@ -5,6 +5,19 @@
 
 using namespace std;
 
+void Explosion::resetExplosion()
+{
+	sprite* workingSprite;
+	workingSprite = startSprite;
+	for(int i = 0; i < 10; i++)
+	{
+		sprite* nextSprite = workingSprite->child;
+		workingSprite->activated = false;
+		workingSprite->curFrame = 0;
+		dbHideSprite(workingSprite->id);
+		workingSprite = nextSprite;
+	}
+}
 // Create a new animation
 Explosion::Explosion()
 {

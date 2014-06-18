@@ -13,6 +13,8 @@
 class Ace : public Character
 {
 public:
+	// reset ace to his starting position
+	void initialize(int x, int y);
 	// Constructor and Destructor
 	Ace(int x, int y);
 	~Ace();
@@ -37,7 +39,10 @@ public:
 	// Control ace given the inputs
 	void controlAce(Map *map, bool jumpButton, bool sliceButton, bool leftButton, bool rightButton);
 
+	// Sound control
 	void fadeSounds();
+	void resetSounds();
+
 private:
 	eAnimation eStance;
 	int hurtSpeed;

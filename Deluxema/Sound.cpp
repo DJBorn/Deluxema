@@ -29,7 +29,7 @@ void Sound::stopSound()
 
 void Sound::fade()
 {
-	fadeVolume -= 8;
+	fadeVolume -= .3;
 	if(fadeVolume < 0)
 		fadeVolume = 0;
 	dbSetSoundVolume(id, fadeVolume);

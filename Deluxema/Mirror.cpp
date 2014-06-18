@@ -3,12 +3,11 @@
 #include "DarkGDK.h"
 #include <vector>
 
-
-Mirror::Mirror(int x, int y)
+void Mirror::initialize(int x, int y)
 {
 	Mirror::x = x;
 	Mirror::y = y;
-	eState = eMirror1;
+	setAnimation(eMirror1);
 
 	// vertical movement initializations
 	verticalDelay = 0;
@@ -29,6 +28,10 @@ Mirror::Mirror(int x, int y)
 	dashingRight = true;
 
 	destroyed = false;
+}
+
+Mirror::Mirror(int x, int y)
+{
 
 	width = 68;
 	height = 88;
@@ -42,6 +45,8 @@ Mirror::Mirror(int x, int y)
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror5.bmp", -36, -36, 0, 4, 2, 0, 8, 16, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Break.bmp", -36, -36, 0, 4, 3, 0, 12, 2, 199, 200)); // delay is 8
 	animations.push_back(new Animation("includes//Sprites//Mirror//Mirror_Hitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
+
+	initialize(x, y);
 }
 
 Mirror::~Mirror()

@@ -8,6 +8,7 @@
 void Missile::initialize()
 {
 	explosion.turnOffExplosion();
+	resetSounds();
 	setAnimation(eFlying);
 	if(!facingRight)
 		changeDirection();
@@ -134,4 +135,14 @@ void Missile::fadeSounds()
 {
 	Explode.fade();
 	explosion.fadeSound();
+}
+
+void Missile::resetSounds()
+{
+	Explode.resetVolume();
+}
+
+void Missile::resetExplosion()
+{
+	explosion.resetExplosion();
 }
