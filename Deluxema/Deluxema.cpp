@@ -51,6 +51,11 @@ int aceSpawnY = 311;
 int mirrorSpawnX = 500 - 34;
 int mirrorSpawnY = 146;
 
+// Objects
+Map *map;
+Ace *ace;
+Mirror *mirror;
+vector<Robot*>* robots;
 Explosion *leftExplosion, *rightExplosion;
 Sparkle *sparkle1, *sparkle2, *sparkle3;
 vector<Missile*>* missiles;
@@ -80,33 +85,39 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 
 void createMenuEffects()
 {
+	// Load the Score text
 	scoreId = generateid();
 	dbCreateAnimatedSprite(scoreId, "includes//Sprites//Effects//Score.bmp", 1, 1, scoreId);
 	dbSprite(scoreId, 200, 0, scoreId);
 	dbHideSprite(scoreId);
 	dbSetSpritePriority(scoreId, 202);
 
+	// Load the main title
 	titleId = generateid();
 	dbCreateAnimatedSprite(titleId, "includes//Sprites//Effects//Deluxema.bmp", 1, 1, titleId);
 	dbSprite(titleId, 500 - dbSpriteWidth(titleId)/2, 68, titleId);
 	dbSetSpritePriority(titleId, 202);
 
+	// Load the start button text
 	startId = generateid();
 	dbCreateAnimatedSprite(startId, "includes//Sprites//Effects//Start.bmp", 1, 2, startId);
 	dbSprite(startId, 500 - dbSpriteWidth(startId)/2, 250, startId);
 	dbSetSpritePriority(startId, 202);
 
+	// Load the controls text
 	controlsId = generateid();
 	dbCreateAnimatedSprite(controlsId, "includes//Sprites//Effects//Controls.bmp", 1, 1, controlsId);
 	dbSprite(controlsId, 500 - dbSpriteWidth(controlsId)/2, 374, controlsId);
 	dbSetSpritePriority(controlsId, 202);
 
+	// Load the white fade sprite
 	fadeId = generateid();
 	dbCreateAnimatedSprite(fadeId, "includes//Sprites//Effects//Fade.bmp", 1, 1, fadeId);
 	dbSprite(fadeId, 0, 0, fadeId);
 	dbSetSpritePriority(fadeId, 300);
 	dbSetSpriteAlpha(fadeId, 0);
 
+	// Load the sound when the user presses enter
 	startSoundId = generateid();
 	dbLoadSound("includes//Sounds//Effects//Start_Select.wav", startSoundId);
 	dbSetSoundVolume(startSoundId, 90);
@@ -167,7 +178,8 @@ void deleteMenuEffects()
 	delete sparkle3;
 }
 
-void continuousAnimations(vector<Robot*>* robots)
+// The function that finishes playing animations that have been deactivated
+void continuousAnimations()
 {
 	for(int i = 0; i < robots->size(); i++)
 	{
@@ -178,7 +190,7 @@ void continuousAnimations(vector<Robot*>* robots)
 		missiles->at(i)->playExplosion();
 	}
 }
-void resetGame(Ace *ace, vector<Robot*>* robots, Mirror *mirror, Map *map)
+void resetGame()
 {
 	// hide the score
 	dbHideSprite(scoreId);
@@ -232,21 +244,27 @@ void resetGame(Ace *ace, vector<Robot*>* robots, Mirror *mirror, Map *map)
 
 void fadeOut()
 {
+	// Increase the visibility of the white fade sprite
 	fadeAlpha+= 1;
 	fadeMainTheme();
+
+	// Once the white sprite is completely visible, change the state of the game
 	if(fadeAlpha > 255)
 	{
 		timespeed = 0;
 		fadeAlpha = 255;
-		dbSetSpriteAlpha(fadeId, fadeAlpha);
 		eGameMode = eEnding;
 	}
+
+	// Set the alpha
 	dbSetSpriteAlpha(fadeId, fadeAlpha);
 
 }
 
+// How long the game should pause for before fading back into the main menu
 void fadePause()
 {
+	// Increase the fade timer, then change the state of the program to title screen setup
 	fadeTimer++;
 	if(fadeTimer == 100)
 	{
@@ -255,8 +273,10 @@ void fadePause()
 	}
 }
 
-void fadeIn(Ace *ace, Mirror *mirror)
+// The fading in of the main menu
+void fadeIn()
 {
+	// Play the animations of ace and the mirror while the game is fading in
 	ace->playAnimation();
 	mirror->moveVertical();
 	mirror->playAnimation();
@@ -265,6 +285,8 @@ void fadeIn(Ace *ace, Mirror *mirror)
 	{
 		fadeAlpha = 0;
 		eGameMode = eTitleScreen;
+
+		// Show the texts on the main menu once fully faded in
 		dbShowSprite(titleId);
 		dbShowSprite(startId);
 		dbShowSprite(controlsId);
@@ -273,7 +295,8 @@ void fadeIn(Ace *ace, Mirror *mirror)
 	dbSetSpriteAlpha(fadeId, fadeAlpha);
 }
 
-void gameOverCheck(Ace *ace, vector<Robot*>* robots, Mirror *mirror)
+// Check if the player has lost
+void gameOverCheck()
 {
 	if(mirror->Destroyed() && !gameOver)
 	{
@@ -282,30 +305,43 @@ void gameOverCheck(Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 
 	if(gameOver)
 	{
+		// Fade ace's sounds
 		ace->fadeSounds();
+
+		// Fade all the sounds of the robots
 		for(int i = 0; i < robots->size(); i++)
 		{
 			robots->at(i)->fadeSounds();
 		}
+		// Fade all the sounds of the missiles
 		for(int i = 0; i < missiles->size(); i++)
 		{
 			missiles->at(i)->fadeSounds();
 		}
+		
+		// change the speed of the game to slow motion
 		timespeed = 15;
 		fadeOut();
 	}
 }
 
 // Map setup creates all the hit boxes where the player and robots shouldn't go
-void mapSetup(Map *map)
+void mapSetup()
 {
+	// Create the ground
 	map->addGlobalHitBox(-1000, 386, 3000, 50);
+
+	// Create the left wall ace cannot pass
 	map->addAceHitBox(-12, 0, 20, 500);
+
+	// Create the right wall ace cannot pass
 	map->addAceHitBox(992, 0, 20, 500);
+
+	// change to the title screen
 	eGameMode = eTitleScreen;
 }
 
-void titleScreen(Ace *ace, Map *map, Mirror *mirror)
+void titleScreen()
 {
 	// Hide game texts if the game is restarting
 	dbHideSprite(scoreId);
@@ -410,7 +446,7 @@ void titleScreen(Ace *ace, Map *map, Mirror *mirror)
 	ace->playAnimation();
 }
 
-void applyGravity(Ace *ace, vector<Robot*>* robots)
+void applyGravity()
 {
 	ace->Gravity(gravity);
 	for(int i = 0; i < robots->size(); i++)
@@ -423,7 +459,7 @@ void applyGravity(Ace *ace, vector<Robot*>* robots)
 	}
 }
 
-void controller(Ace *ace, vector<Robot*>* robots, Map *map)
+void controller()
 {
 	vector<RectangleObject> robotAttacks;
 	vector<bool> attackerFacingRight;
@@ -438,7 +474,7 @@ void controller(Ace *ace, vector<Robot*>* robots, Map *map)
 	ace->controlAce(map, checkZ(), checkX(), checkLeft(), checkRight());
 }
 
-void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
+void robotAI()
 {
 	for(int i = 0; i < robots->size(); i++)
 	{
@@ -447,14 +483,14 @@ void robotAI(vector<Robot*>* robots, Ace *ace, Map *map)
 	}
 }
 
-void mirrorAI(Mirror *mirror)
+void mirrorAI()
 {
 	mirror->moveVertical();
 	mirror->moveHorizontal();
 	mirror->playAnimation();
 }
 
-void missileAI(Ace *ace, Mirror *mirror, Map *map)
+void missileAI()
 {
 	for(int i = 0; i < missiles->size(); i++)
 	{
@@ -469,29 +505,29 @@ void missileAI(Ace *ace, Mirror *mirror, Map *map)
 
 
 
-void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
+void Deluxema()
 {
 	// switch for game mode
 	switch ( eGameMode )
 	{
 	case eMapSetup:
 		{
-			mapSetup(map);
+			mapSetup();
 			break;
 		}
 	case eTitleScreenSetup:
 		{
-			resetGame(ace, robots, mirror, map);
+			resetGame();
 			break;
 		}
 	case eFadeIntoTitle:
 		{
-			fadeIn(ace, mirror);
+			fadeIn();
 			break;
 		}
 	case eTitleScreen:
 		{
-			titleScreen(ace, map, mirror);
+			titleScreen();
 			break;
 		}
 	case eGame:
@@ -499,15 +535,15 @@ void Deluxema(Map *map, Ace *ace, vector<Robot*>* robots, Mirror *mirror)
 			if(time > timespeed)
 			{
 				time = 0;
-				applyGravity(ace, robots);
-				controller(ace, robots, map);
-				robotAI(robots, ace, map);
-				continuousAnimations(robots);
-				missileAI(ace, mirror, map);
-				mirrorAI(mirror);
+				applyGravity();
+				controller();
+				robotAI();
+				continuousAnimations();
+				missileAI();
+				mirrorAI();
 				displayNumber(score, 286, 0);
 			}
-			gameOverCheck(ace, robots, mirror);
+			gameOverCheck();
 			break;
 		}
 	case eEnding:
@@ -526,10 +562,10 @@ void DarkGDK ( void )
 	setup();
 
 	// Create objects
-	Map *map = new Map();
-	Ace *ace = new Ace(aceSpawnX, aceSpawnY);
-	Mirror *mirror = new Mirror(500 - 34, 146);
-	vector<Robot*>* robots = new vector<Robot*>;
+	map = new Map();
+	ace = new Ace(aceSpawnX, aceSpawnY);
+	mirror = new Mirror(500 - 34, 146);
+	robots = new vector<Robot*>;
 	for(int i = 0; i < numRobots; i++)
 	{
 		robots->push_back(new Robot());
@@ -553,7 +589,7 @@ void DarkGDK ( void )
 	while ( LoopGDK ( ) )
 	{
 		time++;
-		Deluxema(map, ace, robots, mirror);
+		Deluxema();
 
 		// exit if escape key is pressed
 		if ( dbEscapeKey ( ) )

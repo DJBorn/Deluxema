@@ -38,7 +38,7 @@ void stopMainTheme()
 
 void fadeMainTheme()
 {
-	mainThemeVolume -= 0.3;
+	mainThemeVolume -= 0.25;
 	dbSetMusicVolume(mainThemeId, mainThemeVolume);
 }
 
