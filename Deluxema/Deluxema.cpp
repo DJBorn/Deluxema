@@ -30,6 +30,7 @@ int numRobots = 6;
 int numMissiles = 2;
 int score = 0;
 int scoreId;
+int highScoreId;
 int titleId;
 int startId;
 int fadeId;
@@ -91,6 +92,12 @@ void createMenuEffects()
 	dbSprite(scoreId, 200, 0, scoreId);
 	dbHideSprite(scoreId);
 	dbSetSpritePriority(scoreId, 202);
+
+	// Load the High Score text
+	highScoreId = generateid();
+	dbCreateAnimatedSprite(highScoreId, "includes//Sprites//Effects//High_Score.bmp", 1, 1, highScoreId);
+	dbSprite(highScoreId, 500, 0, highScoreId);
+	dbSetSpritePriority(highScoreId, 202);
 
 	// Load the main title
 	titleId = generateid();
@@ -171,6 +178,8 @@ void deleteMenuEffects()
 {
 	dbDeleteSprite(titleId);
 	dbDeleteSprite(startId);
+	dbDeleteSprite(scoreId);
+	dbDeleteSprite(highScoreId);
 	dbDeleteSprite(controlsId);
 	dbDeleteSound(startSoundId);
 	delete sparkle1;
