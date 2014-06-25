@@ -13,6 +13,8 @@ using namespace std;
 
 void Robot::initialize()
 {
+	playingHitAnimation = false;
+	hitAnimation->stopAnimation();
 	speed = 0;
 	maxSpeed = 20;
 	maxSpeedTimer = 0;
@@ -51,6 +53,8 @@ explosion()
 	animations.push_back(new Animation("includes//Sprites//Robot//robothitbox.bmp", 0, 0, 0, 1, 1, 1, 0, 1, 199, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Robot//punchhitbox.bmp", 0, 0, 0, 1, 1, 1, 0, 1, 199, 200)); //TEMPORARY GET RID
 
+	hitAnimation = new Animation("includes//Sprites//Effects//Hit_Effect.bmp", -13, -13, 0, 4, 2, 0, 8, 2, 206, 200);
+
 	initialize();
 }
 
@@ -58,6 +62,7 @@ Robot::~Robot()
 {
 	for(int i = 0; i < animations.size(); i++)
 		delete animations[i];
+	delete hitAnimation;
 }
 
 void Robot::playAnimation()
@@ -173,6 +178,12 @@ void Robot::checkDeath(RectangleObject attack, bool attackerFacingRight, bool at
 		// make sure the Robot is not attacking while he's dead
 		Robot::attacking = false;
 		score++;
+
+		// Set variables for hit animation at the time the robot died
+		playingHitAnimation = true;
+		hitAnimationX = ((attack.x + attack.width/2) - (x + width/2))/2 + x;
+		hitAnimationY = ((attack.y + attack.height/2) - (y + height/2))/2 + y;
+
 		explosion.turnOnExplosion();
 		deathSound.playSound();
 		if(attackerFacingRight)
@@ -303,6 +314,23 @@ void Robot::AI(RectangleObject *target, Map *map)
 void Robot::playExplosion()
 {
 	explosion.playExplosion(x, x + width, y, y + height);
+}
+
+void Robot::playHitAnimation(RectangleObject target)
+{
+	if(playingHitAnimation)
+	{
+		int frame;
+		bool ended = false;
+		hitAnimation->playAnimation(hitAnimationX, hitAnimationY, &frame, false, &ended);
+		if(ended)
+		{
+			hitAnimation->stopAnimation();
+			playingHitAnimation = false;
+		}
+	}
+	else
+		hitAnimation->stopAnimation();
 }
 
 void Robot::fadeSounds()

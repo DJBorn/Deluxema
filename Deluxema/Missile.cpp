@@ -24,7 +24,8 @@ void Missile::initialize()
 
 }
 
-Missile::Missile() : Explode("includes//Sounds//Effects//Missile_Explosion.wav", 90)
+Missile::Missile() : 
+Explode("includes//Sounds//Effects//Missile_Explosion.wav", 90)
 {
 	width = 106;
 	height = 34;
@@ -96,6 +97,7 @@ void Missile::checkHitCollision(RectangleObject object, bool attackerFacingRight
 	{
 		score++;
 		explosion.turnOnExplosion();
+		Explode.playSound();
 		if(attackerFacingRight)
 			speed = 3;
 		else

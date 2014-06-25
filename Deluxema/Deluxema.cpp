@@ -489,6 +489,7 @@ void robotAI()
 	{
 		robots->at(i)->checkDeath(ace->getAttack(), ace->getFacingRight(), ace->Attacking(), score);
 		robots->at(i)->AI(ace, map);
+		robots->at(i)->playHitAnimation(ace->getAttack());
 	}
 }
 

@@ -42,7 +42,7 @@ Explosion::Explosion()
 	// Load the sprite with the struct data
 	dbCreateAnimatedSprite(startSprite->id,"includes//Sprites//Effects//Explosion.bmp", 4, 2, startSprite->id);
 	dbScaleSprite(startSprite->id, 200);
-	dbSetSpritePriority(startSprite->id, 201);
+	dbSetSpritePriority(startSprite->id, 205);
 	dbHideSprite(startSprite->id);
 
 	// Create 9 more sprites. (The explosion animation has 8 frames, so 10 sprites should be plenty)
@@ -63,7 +63,7 @@ Explosion::Explosion()
 
 		dbCreateAnimatedSprite(newSprite->id, "includes//Sprites//Effects//Explosion.bmp", 4, 2, newSprite->id);
 		dbScaleSprite(newSprite->id, 200);
-		dbSetSpritePriority(newSprite->id, 201);
+		dbSetSpritePriority(newSprite->id, 205);
 		dbHideSprite(newSprite->id);
 	}
 }

@@ -38,18 +38,18 @@ portalSound("includes//Sounds//Effects//Ace//Ace_Portal.wav", 90)
 
 	// add all of Ace's animations
 								//x, y, flip, width, height, startFrame, maxFrame, maxDelay, priority, scale
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 200, 200)); // delay is 8
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 10, 3, 200, 200)); // delay is 3
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 10, 2, 200, 200));// delay is 2
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 200, 200)); // delay is 2
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 0, 1, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Stand.bmp", -20, -12, -34, 4, 2, 0, 8, 8, 203, 200)); // delay is 8
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Run.bmp",  -62, -14, 50, 5, 2, 0, 10, 3, 203, 200)); // delay is 3
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Slice.bmp", -86, -30, -26, 5, 2, 0, 10, 2, 203, 200));// delay is 2
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump_Slash.bmp", -108, -30, 18, 3, 3, 0, 9, 2, 203, 200)); // delay is 2
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Jump.bmp", -58, 0, 50, 1, 1, 0, 1, 1, 203, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Hurt.bmp", -34, -24, -2, 1, 1, 0, 1, 1, 203, 200));
 
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sleeping.bmp", -12, 5, 0, 2, 1, 0, 2, 50, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Waking_Up.bmp", -12, 5, 0, 4, 1, 0, 4, 6, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sitting.bmp", -12, 5, 0, 1, 1, 0, 1, 1, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Up.bmp", -50, -16, 0, 4, 1, 0, 4, 4, 200, 200));
-	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Sword.bmp", -50, -16, 0, 4, 3, 0, 12, 3, 200, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sleeping.bmp", -12, 5, 0, 2, 1, 0, 2, 50, 203, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Waking_Up.bmp", -12, 5, 0, 4, 1, 0, 4, 6, 203, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Sitting.bmp", -12, 5, 0, 1, 1, 0, 1, 1, 203, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Up.bmp", -50, -16, 0, 4, 1, 0, 4, 4, 203, 200));
+	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Getting_Sword.bmp", -50, -16, 0, 4, 3, 0, 12, 3, 203, 200));
 
 	animations.push_back(new Animation("includes//Sprites//Ace//acehitbox.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 200, 200)); //TEMPORARY GET RID
 	animations.push_back(new Animation("includes//Sprites//Ace//Ace_Ground_Slash.bmp", 0, 0, 0, 1, 1, 0, 1, 1, 199, 200)); //TEMPORARY GET RID

@@ -43,6 +43,8 @@ public:
 
 	void playExplosion();
 
+	void playHitAnimation(RectangleObject target);
+
 	// sound control
 	void fadeSounds();
 	void resetSounds();
@@ -68,6 +70,11 @@ private:
 	Explosion explosion;
 
 	eAnimation eStance;
+
+	Animation *hitAnimation;
+	int hitAnimationX;
+	int hitAnimationY;
+	bool playingHitAnimation;
 };
 
 #endif // _ROBOT_H_
